@@ -16,8 +16,8 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style scoped>
 .item-list {
-  background-color: $ffffff;
+  background-color: #ffffff;
 }
 </style>
