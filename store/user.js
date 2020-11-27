@@ -52,7 +52,7 @@ export const actions = {
       }
       if (user) {
         commit('setUser', user)
-        this.app.router.push('/users/test')
+        this.app.router.push('/users/history')
       }
     } catch (error) {
       // eslint-disable-next-line no-console
