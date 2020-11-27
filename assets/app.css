@@ -1,0 +1,12 @@
+html {
+  background-color: #E5E5E5;
+}
+
+.bg-light {
+  background-color: #ffffff !important;
+}
+
+.navbar-light .navbar-toggler {
+  border: none !important;
+  padding: 0;
+}
