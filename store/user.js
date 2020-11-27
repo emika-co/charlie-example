@@ -10,19 +10,21 @@ export const state = () => ({
 
 export const mutations = {
   setUser (state, payload) {
-    if (payload.uid && payload.name && payload.email) {
-      state.user.uid = payload.uid
-      state.user.name = payload.name
-      state.user.email = payload.email
-      const auth = state.user
-      // expires 1 day
-      this.$cookies.set('auth', auth, { expires: 1 })
-    } else {
-      state.user = {
-        uid: '',
-        name: '',
-        email: ''
+    if (payload) {
+      if (payload.uid && payload.name && payload.email) {
+        state.user.uid = payload.uid
+        state.user.name = payload.name
+        state.user.email = payload.email
+        const auth = state.user
+        // expires 1 day
+        this.$cookies.set('auth', auth, { expires: 1 })
+        return
       }
+    }
+    state.user = {
+      uid: '',
+      name: '',
+      email: ''
     }
   }
 }
@@ -37,7 +39,11 @@ export const actions = {
   async onAuth ({ commit }) {
     try {
       const result = await auth().getRedirectResult()
-      const user = {}
+      const user = {
+        uid: '',
+        name: '',
+        email: ''
+      }
       if (result.user) {
         user.uid = result.user.uid
         user.name = result.user.displayName
@@ -50,7 +56,7 @@ export const actions = {
           user.email = currentUser.email
         }
       }
-      if (user) {
+      if (user.uid) {
         commit('setUser', user)
         this.app.router.push('/users/history')
       }
@@ -84,9 +90,10 @@ export const actions = {
   },
   async signOut ({ commit }) {
     try {
-      this.$cookies.remove('user')
+      this.$cookies.remove('auth')
       commit('setUser', null)
       await auth().signOut()
+      this.app.router.push('/')
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error)
