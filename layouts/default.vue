@@ -6,8 +6,8 @@
 
 <script>
 export default {
-  async mounted () {
-    await this.$store.dispatch('onAuth')
+  async beforeMount () {
+    await this.$store.dispatch('user/onAuth')
   }
 }
 </script>

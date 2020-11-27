@@ -6,10 +6,6 @@
 
 <script>
 export default {
-  middleware: 'auth',
-  mounted () {
-    // eslint-disable-next-line no-console
-    console.log(this.$store.getters.getUser)
-  }
+  middleware: ['auth']
 }
 </script>

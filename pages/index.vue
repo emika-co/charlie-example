@@ -5,7 +5,8 @@
       <h1 class="title">
         charlie
       </h1>
-      <facebook-login />
+      <facebook-login class="mb-3" />
+      <google-login />
       <button class="btn" @click="signOut()">
         SignOut
       </button>
@@ -14,12 +15,14 @@
 </template>
 
 <script>
-import FacebookLogin from '~/components/FacebookLogin.vue'
+import FacebookLogin from '~/components/auth/FacebookLogin.vue'
+import GoogleLogin from '~/components/auth/GoogleLogin.vue'
 export default {
-  components: { FacebookLogin },
+  name: 'Login',
+  components: { FacebookLogin, GoogleLogin },
   methods: {
     signOut () {
-      this.$store.dispatch('signOut')
+      this.$store.dispatch('user/signOut')
     }
   }
 }

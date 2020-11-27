@@ -11,7 +11,7 @@ export default {
   methods: {
     async facebookLogin () {
       try {
-        await this.$store.dispatch('signInWithFacebook')
+        await this.$store.dispatch('user/signInWithFacebook')
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log(error)
