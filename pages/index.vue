@@ -20,6 +20,9 @@ import GoogleLogin from '~/components/auth/GoogleLogin.vue'
 export default {
   name: 'Login',
   components: { FacebookLogin, GoogleLogin },
+  async beforeMount () {
+    await this.$store.dispatch('user/onAuth')
+  },
   methods: {
     signOut () {
       this.$store.dispatch('user/signOut')
