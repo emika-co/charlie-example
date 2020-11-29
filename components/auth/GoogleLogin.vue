@@ -1,6 +1,7 @@
 <template>
   <div>
-    <button class="btn btn-primary" @click="facebookLogin()">
+    <button class="btn w-100 btn-login btn-google" @click="facebookLogin()">
+      <img src="~/assets/google-logo.svg" class="logo-icon">
       เข้าสู่ระบบด้วย Google
     </button>
   </div>

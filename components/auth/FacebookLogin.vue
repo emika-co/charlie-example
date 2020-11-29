@@ -1,6 +1,7 @@
 <template>
   <div>
-    <button class="btn btn-primary" @click="facebookLogin()">
+    <button class="btn w-100 btn-login btn-facebook" @click="facebookLogin()">
+      <img src="~/assets/facebook-logo.svg" class="logo-icon">
       เข้าสู่ระบบด้วย Facebook
     </button>
   </div>
@@ -20,3 +21,6 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+</style>
