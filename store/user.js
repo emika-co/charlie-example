@@ -5,7 +5,8 @@ export const state = () => ({
     uid: '',
     name: '',
     email: ''
-  }
+  },
+  authRedirectURL: '/users/history'
 })
 
 export const mutations = {
@@ -32,11 +33,14 @@ export const mutations = {
 export const getters = {
   getUser (state) {
     return state.user
+  },
+  getAuthRedirectURL (state) {
+    return state.authRedirectURL
   }
 }
 
 export const actions = {
-  async onAuth ({ commit }) {
+  async onAuth ({ commit, getters }) {
     try {
       const result = await auth().getRedirectResult()
       const user = {
@@ -58,7 +62,7 @@ export const actions = {
       }
       if (user.uid) {
         commit('setUser', user)
-        this.app.router.push('/users/history')
+        this.app.router.push(getters.getAuthRedirectURL)
       }
     } catch (error) {
       // eslint-disable-next-line no-console

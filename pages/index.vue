@@ -1,8 +1,8 @@
 <template>
-  <div class="container d-flex">
-    <div class="row justify-content-center align-middle">
-      <Logo />
-      <h1 class="title">
+  <div class="container d-flex justify-content-center">
+    <div class="align-self-center w-100">
+      <Logo class="d-flex justify-content-center" />
+      <h1 class="title text-center">
         Project Charlie
       </h1>
       <facebook-login class="mb-3" />
@@ -16,9 +16,16 @@ import FacebookLogin from '~/components/auth/FacebookLogin.vue'
 import GoogleLogin from '~/components/auth/GoogleLogin.vue'
 export default {
   name: 'Login',
+  middleware: ['home'],
   components: { FacebookLogin, GoogleLogin },
   async beforeMount () {
     await this.$store.dispatch('user/onAuth')
   }
 }
 </script>
+
+<style scoped>
+  .container {
+    height: 100vh;
+  }
+</style>
