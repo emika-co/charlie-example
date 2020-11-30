@@ -1,0 +1,33 @@
+body {
+  background-color: #F8F9FA;
+}
+
+.bg-light {
+  background-color: #ffffff !important;
+}
+
+.navbar-light .navbar-toggler {
+  border: none !important;
+  padding: 0;
+}
+
+.logo-icon {
+  width: 20px;
+  height: 20px;
+  margin-top: -3px;
+}
+
+.btn-login {
+  border: 1px solid #EBEBEB;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
+}
+
+.btn-login.btn-facebook {
+  background-color: #1a78f2;
+  color: white;
+}
+
+.btn-login.btn-google {
+  background-color: #ffffff;
+  color: #324C5B;
+}
