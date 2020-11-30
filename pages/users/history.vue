@@ -1,10 +1,11 @@
 <template>
   <div>
-    <Nuxt />
+    <UserNavbar />
   </div>
 </template>
 
 <script>
 export default {
+  middleware: ['auth']
 }
 </script>
