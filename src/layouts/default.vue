@@ -6,5 +6,11 @@
 
 <script>
 export default {
+  created () {
+    // eslint-disable-next-line
+    console.log("Test")
+    // eslint-disable-next-line
+    console.log(process.env)
+  }
 }
 </script>
