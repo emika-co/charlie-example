@@ -8,7 +8,7 @@
 export default {
   created () {
     // eslint-disable-next-line
-    console.log("Test")
+    console.log(process.env.API_KEY)
     // eslint-disable-next-line
     console.log(process.env.firebaseConfig)
   }
