@@ -10,7 +10,7 @@ export default {
     // eslint-disable-next-line
     console.log("Test")
     // eslint-disable-next-line
-    console.log(process.env)
+    console.log(process.env.firebaseConfig)
   }
 }
 </script>
