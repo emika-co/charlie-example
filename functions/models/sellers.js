@@ -2,7 +2,7 @@ const admin = require('firebase-admin')
 const db = admin.firestore()
 
 var Seller = (() => {
-  Seller ((seller) => {
+  function Seller (seller) {
     this.storeName = seller.storeName;
     this.firstName = seller.firstName;
     this.lastName = seller.lastName;
@@ -11,7 +11,7 @@ var Seller = (() => {
     this.address = seller.address;
     this.bankAccount = seller.bankAccount;
     this.valid = true;
-  });
+  }
 
   Seller.prototype.validate = (async () => {
     try {
