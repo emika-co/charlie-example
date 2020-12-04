@@ -1,11 +1,12 @@
 <template>
   <div>
-    <UserNavbar />
+    history
   </div>
 </template>
 
 <script>
 export default {
-  middleware: ['auth']
+  middleware: ['auth'],
+  layout: 'app'
 }
 </script>
