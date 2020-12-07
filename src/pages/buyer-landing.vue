@@ -1,7 +1,7 @@
 <template>
   <div class="container d-flex justify-content-center">
     <div class="align-self w-100">
-      <div class="row">
+      <div class="row" style="padding-top: 20px;">
         <div class="col-8">
           <p style="font-weight: 300;">
             ชีทสรุปเคมี ม.4-6 รวมทุกเนื้อหา โดยอาจารย์กบ พ่อทุกสถาบัน
@@ -149,18 +149,10 @@
 </template>
 
 <script>
-// <img src="~/assets/logo.svg" alt="logo">
-
-// import FacebookLogin from '~/components/auth/FacebookLogin.vue'
-// import GoogleLogin from '~/components/auth/GoogleLogin.vue'
-// export default {
-//   name: 'Login',
-//   middleware: ['home'],
-//   components: { FacebookLogin, GoogleLogin },
-//   async beforeMount () {
-//     await this.$store.dispatch('user/onAuth')
-//   }
-// }
+export default {
+  // middleware: ['auth'],
+  layout: 'app'
+}
 </script>
 
 <style>
