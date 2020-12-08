@@ -1,11 +1,8 @@
-@font-face {
-  font-family: 'Sukhumvit';
-  src: url('./fonts/SukhumvitSet-Light.ttf') format('truetype');
-}
-
 body {
   background-color: #F8F9FA;
-  font-family: 'Sukhumvit';
+  font-family: 'Kanit', sans-serif;
+  color: #324C5B;
+  font-weight: 300;
 }
 
 a {
