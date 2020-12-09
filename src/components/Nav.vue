@@ -1,13 +1,13 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a href="#" @click="back()">
+    <div class="app-link" @click="back()">
       <span class="material-icons float-left">
         arrow_back_ios
       </span>
       <span class="float-right">
         ย้อนกลับ
       </span>
-    </a>
+    </div>
     <span class="ml-auto">
       {{ pageTitle }}
     </span>
