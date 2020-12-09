@@ -4,9 +4,9 @@
       <img src="~/assets/logo.svg" alt="logo">
     </div>
     <div v-if="!store" class="text-center">
-      <a href="/sellers/stores" class="btn btn-primary py-2 px-5 mx-auto">
+      <button class="btn btn-primary py-2 px-5 mx-auto" @click="goTo('/sellers/kyc')">
         สมัครเป็นผู้ขาย
-      </a>
+      </button>
     </div>
     <hr>
     <div class="list-group list-group-flush">
@@ -29,6 +29,9 @@ export default {
   methods: {
     signOut () {
       this.$store.dispatch('user/signOut')
+    },
+    goTo (url) {
+      this.$store.dispatch('goToPage', url)
     }
   }
 }

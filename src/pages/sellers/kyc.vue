@@ -86,7 +86,7 @@
 <script>
 export default {
   layout: 'view',
-  // middleware: ['auth'],
+  middleware: ['auth', 'kyc'],
   created () {
     this.$store.dispatch('setPageTitle', 'สมัครเป็นผู้ขาย')
   }

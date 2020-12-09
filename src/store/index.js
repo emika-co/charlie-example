@@ -1,6 +1,7 @@
 export const state = () => ({
   pageTitle: '',
-  previousPage: ''
+  previousPage: '',
+  currentPage: ''
 })
 
 export const mutations = {
@@ -9,6 +10,9 @@ export const mutations = {
   },
   setPreviousPage (state, payload) {
     state.previousPage = payload
+  },
+  setCurrentPage (state, payload) {
+    state.currentPage = payload
   }
 }
 
@@ -18,6 +22,9 @@ export const getters = {
   },
   getPreviousPage (state) {
     return state.previousPage
+  },
+  getCurrentPage (state) {
+    return state.currentPage
   }
 }
 
@@ -25,8 +32,8 @@ export const actions = {
   setPageTitle ({ commit }, pageTitle) {
     commit('setPageTitle', pageTitle)
   },
-  goToPage ({ commit }, previousPage, nextPage) {
-    commit('setPreviousPage', previousPage)
+  goToPage ({ commit, getters }, nextPage) {
+    commit('setPreviousPage', getters.getPreviousPage)
     this.app.router.push(nextPage)
   },
   backToPreviousPage ({ getters }) {
@@ -34,5 +41,8 @@ export const actions = {
       return this.app.router.push('/')
     }
     this.app.router.push(getters.getPreviousPage)
+  },
+  setCurrentPage ({ commit }, currentPage) {
+    commit('setCurrentPage', currentPage)
   }
 }
