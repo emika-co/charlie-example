@@ -3,10 +3,10 @@
     <div class="sidebar-heading">
       <img src="~/assets/logo.svg" alt="logo">
     </div>
-    <div class="text-center">
-      <nuxt-link to="/sellers/stores" class="btn btn-primary py-2 px-5 mx-auto">
+    <div v-if="!store" class="text-center">
+      <a href="/sellers/stores" class="btn btn-primary py-2 px-5 mx-auto">
         สมัครเป็นผู้ขาย
-      </nuxt-link>
+      </a>
     </div>
     <hr>
     <div class="list-group list-group-flush">
@@ -18,6 +18,14 @@
 
 <script>
 export default {
+  computed: {
+    store () {
+      if (this.$store.state.seller.store.id) {
+        return true
+      }
+      return false
+    }
+  },
   methods: {
     signOut () {
       this.$store.dispatch('user/signOut')
