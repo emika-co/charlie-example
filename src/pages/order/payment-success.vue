@@ -1,5 +1,5 @@
 <template>
-  <div class="container d-flex justify-content-center" style="margin-top: 10%;">
+  <div class="container d-flex justify-content-center" style="margin-top: 100px;">
     <div class="align-self w-100">
       <div class="card text-center">
         <div class="card-body">

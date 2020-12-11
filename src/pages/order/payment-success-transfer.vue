@@ -1,50 +1,35 @@
 <template>
-  <div class="container d-flex justify-content-center" style="margin-top: 10%;">
+  <div class="container d-flex justify-content-center" style="margin-top: 100px;">
     <div class="align-self w-100">
       <div class="card text-center">
-        <div class="card-body">
+        <div class="card-header" style="background-color: #113566;">
+          <img src="/qr-payment.jpg">
+        </div>
+        <div class="card-body" style="padding-top: 300px;">
           <div class="row">
             <div class="col-12">
-              <span class="material-icons" style="font-size: 100px;color: #00C300;">
-                published_with_changes
-              </span>
-            </div>
-          </div>
-          <b>
-            การสั่งซื้อสำเร็จ เราได้รับยอดชำระเงิน
-          </b>
-          <br>
-          <b>
-            ของคุณแล้ว
-          </b>
-          <p class="text-muted" style="margin-top: 10px;">
-            เราได้ส่งใบเสร็จรับเงินไปที่อีเมลล์
-          </p>
-          <p class="text-muted" style="margin-top: -10px;">
-            example@mail.com
-          </p>
-          <!-- <a href="#" class="btn btn-primary">ดาวน์โหลดเลย</a> -->
-          <div class="row" style="text-align: left;">
-            <div class="col-9 text-left">
-              <p>ชีทสรุปเคมี ม.4-6 รวมทุกเนื้อหา...</p>
-              <p class="text-muted text-left" style="margin-top: -10px;">
-                Ordery Store
+              <p>
+                ยอดชำระ (บาท)
+              </p>
+              <p style="font-size: 36px;">
+                360.00
               </p>
             </div>
-            <div class="col-3" style="text-align: right;">
-              <p>360฿</p>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <p>
+                บริษัท เอมิกา ไอที แอนด์ คอนซัลติ้ง จำกัด
+              </p>
             </div>
           </div>
           <div class="w-100">
-            <button class="btn btn-primary w-100">
+            <button class="btn btn-primary w-100" style="background-color: white;color: #539AEE;border: 1px solid #539AEE;filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.1));border-radius: 5px;">
               <div class="w-fit-content mx-auto">
-                ดาวน์โหลดเลย
+                บันทึกภาพ QR
               </div>
             </button>
           </div>
-          <p class="text-muted" style="margin-top: 20px;">
-            ขอบคุณที่สนับสนุนผู้ผลิตเนื้อหา
-          </p>
         </div>
       </div>
     </div>
