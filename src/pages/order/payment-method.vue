@@ -22,22 +22,22 @@
             </a>
           </div>
         </div>
-        <div class="col-6" style="padding-top: 20px;">
-          <p class="totalPayment">
+        <div class="col-6" style="padding-top: 15px;">
+          <p style="text-align:right;">
             ยอดรวม 360 บาท
           </p>
         </div>
       </div>
       <div class="row" style="padding-top:10px;">
         <div class="col-12">
-          <p class="subjectPayment">
+          <p class="text-muted">
             ตะกร้าสินค้า
           </p>
         </div>
       </div>
-      <div class="row" style="padding-top:10px;background-color: #FFFFFF;">
+      <div class="row" style="padding-top:10px;background-color:#FFFFFF;">
         <div class="col-4">
-          <img src="/cat.jpg" class="payment">
+          <img src="/cat.jpg">
         </div>
         <div class="col-8">
           <p>ชีทสรุปเคมี ม.4-6 รวมทุกเนื้อหา...</p>
@@ -49,7 +49,7 @@
       </div>
       <div class="row" style="padding-top:10px;">
         <div class="col-12">
-          <p class="subjectPayment">
+          <p class="text-muted">
             อีเมลล์เพื่อรับลิงค์ดาวน์โหลด
           </p>
         </div>
@@ -59,12 +59,16 @@
           อีเมลล์
         </div>
         <div class="col-12" style="padding-top: 10px;margin-bottom: 10px;">
-          <input class="form-control" type="text" placeholder="ระบุอีเมลล์ของคุณ">
+          <input
+            class="form-control"
+            type="text"
+            placeholder="ระบุอีเมลล์ของคุณ"
+          >
         </div>
       </div>
       <div class="row" style="padding-top:10px;">
         <div class="col-12">
-          <p class="subjectPayment">
+          <p class="text-muted">
             โปรดเลือกวิธีการชำระเงิน
           </p>
         </div>

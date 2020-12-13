@@ -1,11 +1,17 @@
 <template>
-  <div class="container d-flex justify-content-center" style="margin-top: 100px;">
+  <div
+    class="container d-flex justify-content-center"
+    style="margin-top: 100px;"
+  >
     <div class="align-self w-100">
       <div class="card text-center">
         <div class="card-body">
           <div class="row">
             <div class="col-12">
-              <span class="material-icons" style="font-size: 100px;color: #00C300;">
+              <span
+                class="material-icons"
+                style="font-size: 100px;color: #00C300;"
+              >
                 published_with_changes
               </span>
             </div>
