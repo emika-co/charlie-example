@@ -29,6 +29,13 @@ export const getters = {
 }
 
 export const actions = {
+  nuxtClientInit ({ commit }, { $cookies }) {
+    const cookies = $cookies.get()
+    if (cookies.auth) {
+      const auth = JSON.parse(cookies.auth)
+      commit('user/setUser', auth)
+    }
+  },
   setPageTitle ({ commit }, pageTitle) {
     commit('setPageTitle', pageTitle)
   },
