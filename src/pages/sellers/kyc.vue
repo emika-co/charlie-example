@@ -126,10 +126,11 @@
 </template>
 
 <script>
-import { firestore } from '~/plugins/firebase'
+import Swal from 'sweetalert2'
+import { firestore, auth } from '~/plugins/firebase'
 export default {
   layout: 'view',
-  // middleware: ['auth', 'kyc'],
+  middleware: ['auth', 'kyc'],
   data () {
     return {
       banks: [],
@@ -265,11 +266,29 @@ export default {
       }
       return false
     },
-    submitRegister () {
+    async submitRegister () {
       if (!this.isStoreValid()) {
-        return false
+        return
       }
-      return true
+      const idToken = await auth().currentUser.getIdToken(true)
+      try {
+        await this.$axios.post('https://us-central1-charlie-296709.cloudfunctions.net/sellers', this.store, {
+          headers: {
+            Authorization: `Bearer ${idToken}`
+          }
+        })
+        Swal.fire(
+          'บันทึกข้อมูลสำเร็จ',
+          '',
+          'success'
+        )
+      } catch (error) {
+        Swal.fire(
+          'เกิดข้อผิดพลาด',
+          '',
+          'error'
+        )
+      }
     }
   }
 }
