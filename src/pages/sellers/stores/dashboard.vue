@@ -1,10 +1,11 @@
 <template>
   <div>
-    <Nuxt />
+    dashboard
   </div>
 </template>
 
 <script>
 export default {
+  middleware: ['seller']
 }
 </script>
