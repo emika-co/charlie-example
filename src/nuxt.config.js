@@ -64,6 +64,7 @@ export default {
   },
 
   env: {
+    environment: process.env.ENV || 'development',
     firebaseConfig: {
       apiKey: process.env.FIREBASE_API_KEY || 'AIzaSyAaYpCEJprT5eecDkrdjlMX6Sma3ANCZVU',
       authDomain: process.env.FIREBASE_AUTH_DOMAIN || 'charlie-296709.firebaseapp.com',

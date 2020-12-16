@@ -105,10 +105,10 @@
             <div class="input-group mb-3" :class="{ 'field-invalid': storeValidator.bankAccount.bank }">
               <span id="bank" class="input-group-text">ธนาคาร</span>
               <select v-model="store.bankAccount.bank" class="form-select form-control ml-auto col-6" aria-describedby="bank" aria-label="bank">
-                <option selected>
+                <option value="" selected>
                   กรุณาเลือกธนาคาร
                 </option>
-                <option v-for="(bank, index) in banks" :key="index" :value="bank.bankTag">
+                <option v-for="(bank, index) in banks" :key="index" :value="bank.id">
                   {{ bank.bankName }}
                 </option>
               </select>
@@ -118,7 +118,7 @@
       </div>
     </div>
     <div class="row mx-2 my-3">
-      <button class="btn btn-primary w-100" @click="submitRegister()">
+      <button ref="submitBtn" class="btn btn-primary w-100" @click="submitRegister()">
         ดำเนินการต่อ
       </button>
     </div>
@@ -127,7 +127,7 @@
 
 <script>
 import Swal from 'sweetalert2'
-import { firestore, auth } from '~/plugins/firebase'
+import { firestore, functions } from '~/plugins/firebase'
 export default {
   layout: 'view',
   middleware: ['auth', 'kyc'],
@@ -203,7 +203,9 @@ export default {
         const bankRef = firestore.collection('banks')
         const snapshot = await bankRef.get()
         snapshot.forEach((doc) => {
-          this.banks.push(doc.data())
+          const data = doc.data()
+          data.id = doc.id
+          this.banks.push(data)
         })
       } catch (error) {
         // eslint-disable-next-line no-console
@@ -266,29 +268,32 @@ export default {
       }
       return false
     },
-    async submitRegister () {
+    submitRegister () {
       if (!this.isStoreValid()) {
         return
       }
-      const idToken = await auth().currentUser.getIdToken(true)
-      try {
-        await this.$axios.post('https://us-central1-charlie-296709.cloudfunctions.net/sellers', this.store, {
-          headers: {
-            Authorization: `Bearer ${idToken}`
+      const createSellers = functions.httpsCallable('createSellers')
+      createSellers(this.store)
+        .then((result) => {
+          const store = {
+            id: result.data._id,
+            name: this.store.storeName
           }
+          this.$store.dispatch('seller/setStore', store)
+          Swal.fire(
+            'บันทึกข้อมูลสำเร็จ',
+            '',
+            'success'
+          )
+          this.$router.push(this.$store.getters['seller/getRedirectURL'])
         })
-        Swal.fire(
-          'บันทึกข้อมูลสำเร็จ',
-          '',
-          'success'
-        )
-      } catch (error) {
-        Swal.fire(
-          'เกิดข้อผิดพลาด',
-          '',
-          'error'
-        )
-      }
+        .catch((error) => {
+          Swal.fire(
+            'เกิดข้อผิดพลาด',
+            error.message,
+            'error'
+          )
+        })
     }
   }
 }

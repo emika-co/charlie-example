@@ -6,6 +6,6 @@
 
 <script>
 export default {
-  middleware: ['seller']
+  middleware: ['auth', 'seller']
 }
 </script>
