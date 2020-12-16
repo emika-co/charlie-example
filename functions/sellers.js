@@ -7,12 +7,13 @@ exports.createSellers = functions.https.onCall(async (data, context) => {
   const s = new Seller(data);
   const invalid = await s.validate();
   if (invalid) {
-    throw new functions.https.HttpsError('invalid-argument', invalid)
+    throw new functions.https.HttpsError('already-exists', invalid)
   }
   try {
     const docRef = await s.create()
     return {
-      _id: docRef.id
+      storeId: docRef.storeId,
+      sellerId: docRef.sellerId
     }
   } catch (error) {
     console.log(error)

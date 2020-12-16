@@ -68,12 +68,19 @@ var Seller = (() => {
         throw('กรุณากรอกธนาคาร');
       }
 
-      const bank = await db.collection('banks').doc(seller.bankAccount.bank);
-      const snapShot = await bank.get();
+      const bankRef = await db.collection('banks').doc(seller.bankAccount.bank);
+      const snapShot = await bankRef.get();
       if (!snapShot.exists) {
         throw('ธนาคารไม่ถูกต้อง');
       } else {
         seller.bankAccount.bank = db.doc('banks/' + seller.bankAccount.bank);
+      }
+
+      // check duplicate storeName
+      const storeRef = await db.collection('stores').where('storeName', '==', seller.storeName)
+      const storeSnapshot = await storeRef.get();
+      if (storeSnapshot.size) {
+        throw('ชื่อร้านค้าถูกใช้งานแล้ว');
       }
     } catch (error) {
       return error;
@@ -84,16 +91,31 @@ var Seller = (() => {
 
   Seller.prototype.create = (async () => {
     try {
-      const docRef = await db.collection('sellers').add({
-        storeName: seller.storeName,
-        firstName: seller.firstName,
-        lastName: seller.lastName,
-        tel: seller.tel,
-        citizenId: seller.citizenId,
-        address: seller.address,
-        bankAccount: seller.bankAccount
-      });
-      return docRef;
+      const result = {
+        sellerId: '',
+        storeId: ''
+      }
+      await db.runTransaction(async (transaction) => {
+        const sellersDocRef = db.collection('sellers').doc()
+        const storesDocRef = db.collection('stores').doc()
+        await transaction.create(sellersDocRef, {
+          firstName: seller.firstName,
+          lastName: seller.lastName,
+          tel: seller.tel,
+          citizenId: seller.citizenId,
+          address: seller.address,
+          bankAccount: seller.bankAccount,
+          uid: seller.uid,
+          valid: false
+        })
+        await transaction.create(storesDocRef, {
+          seller: db.doc('sellers/' + sellersDocRef.id),
+          storeName: seller.storeName
+        })
+        result.sellerId = sellersDocRef.id
+        result.storeId = storesDocRef.id
+      })
+      return result
     } catch (error) {
       return error;
     }
