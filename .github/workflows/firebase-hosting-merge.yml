@@ -20,4 +20,3 @@ jobs:
           projectId: charlie-296709
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
-          ENV: production
