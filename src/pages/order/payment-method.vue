@@ -75,26 +75,26 @@
       </div>
       <div class="row" style="padding-top:10px;background-color: #FFFFFF;">
         <div class="col-12">
-          อีเมลล์
+          โปรดเลือกวิธีการชำระเงิน
         </div>
         <div class="col-12">
-          <button class="btn btn-primary w-100">
+          <button class="btn btn-outline-primary w-100">
             <div class="w-fit-content mx-auto">
               โอนผ่านธนาคาร
             </div>
           </button>
         </div>
-        <div class="col-12">
-          <button class="btn btn-primary w-100">
+        <div class="col-12 pt-10" style="padding-top:10px">
+          <button class="btn btn-outline-primary w-100">
             <div class="w-fit-content mx-auto">
               บัตรเดบิต/เครดิต
             </div>
           </button>
         </div>
       </div>
-      <div class="row" style="padding-top:10px">
+      <div class="row" style="padding-top:50px">
         <div class="col-12">
-          <button class="btn btn-primary w-100">
+          <button class="btn btn-primary w-100" style="background: #539AEE;">
             <div class="w-fit-content mx-auto">
               ดำเนินการต่อ
             </div>
