@@ -98,3 +98,44 @@ a {
 .btn-primary {
   background-color: #539AEE;
 }
+
+.form-control {
+  font-weight: 300;
+}
+
+.field-invalid {
+  transition-duration: 0.3s;
+  border-bottom: 1px solid #ff7070 !important;
+}
+
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+.uneditable-input:focus {
+  border-color: none;
+  box-shadow: none;
+  outline: 0 none;
+}
+
+.app-link {
+  color: #539AEE;
+  text-decoration: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+.app-link:hover {
+  opacity: 0.7;
+  transition-duration: 0.3s;
+}
