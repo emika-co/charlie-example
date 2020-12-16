@@ -1,54 +1,79 @@
 const admin = require('firebase-admin')
 const db = admin.firestore()
 
+var seller = {
+  uid: '',
+  storeName: '',
+  firstName: '',
+  lastName: '',
+  tel: '',
+  citizenId: '',
+  address: {
+    detail: '',
+    subDistrict: '',
+    district: '',
+    province: '',
+    postal: ''
+  },
+  bankAccount: {
+    accountName: '',
+    accountNumber: '',
+    bank: ''
+  },
+  valid: false
+};
+
 var Seller = (() => {
-  function Seller (seller) {
-    this.storeName = seller.storeName;
-    this.firstName = seller.firstName;
-    this.lastName = seller.lastName;
-    this.tel = seller.tel;
-    this.citizenId = seller.citizenId;
-    this.address = seller.address;
-    this.bankAccount = seller.bankAccount;
-    this.valid = true;
+  function Seller (data) {
+    seller.uid = data.uid;
+    seller.storeName = data.storeName;
+    seller.firstName = data.firstName;
+    seller.lastName = data.lastName;
+    seller.tel = data.tel;
+    seller.citizenId = data.citizenId;
+    seller.address = data.address;
+    seller.bankAccount = data.bankAccount;
+    seller.valid = true;
   }
 
   Seller.prototype.validate = (async () => {
     try {
-      if (!this.storeName) {
-        throw('storeName');
-      } else if (!this.firstName) {
-        throw('firstName');
-      } else if (!this.lastName) {
-        throw('lastName');
-      } else if (!this.tel) {
-        throw('tel');
-      } else if (!this.citizenId) {
-        throw('citizenId');
-      } else if (!this.address.detail) {
-        throw('detail');
-      } else if (!this.address.subDistrict) {
-        throw('subDistrict');
-      } else if (!this.address.district) {
-        throw('district');
-      } else if (!this.address.province) {
-        throw('province');
-      } else if (!this.address.postal) {
-        throw('postal');
-      } else if (!this.bankAccount.accountName) {
-        throw('accountName');
-      } else if (!this.bankAccount.accountNumber) {
-        throw('accountNumber');
-      } else if (!this.bankAccount.bank) {
-        throw('bank');
+      if (!seller.uid) {
+        throw('กรุณาล็อคอินใหม่');
+      } else if (!seller.storeName) {
+        throw('กรุณากรอกชื่อร้านค้า');
+      } else if (!seller.firstName) {
+        throw('กรุณากรอกชื่อ');
+      } else if (!seller.lastName) {
+        throw('กรุณากรอกนามสกุล');
+      } else if (!seller.tel) {
+        throw('กรุณากรอกเบอร์โทร');
+      } else if (!seller.citizenId) {
+        throw('กรุณากรอกเลขบัตรประชาชน');
+      } else if (!seller.address.detail) {
+        throw('กรุณากรอกที่อยู่');
+      } else if (!seller.address.subDistrict) {
+        throw('กรุณากรอกตำบล/แขวง');
+      } else if (!seller.address.district) {
+        throw('กรุณากรอกอำเภอ/เขต');
+      } else if (!seller.address.province) {
+        throw('กรุณากรอกจังหวัด');
+      } else if (!seller.address.postal) {
+        throw('กรุณากรอกรหัสไปรษณีย์');
+      } else if (!seller.bankAccount.accountName) {
+        throw('กรุณากรอกชื่อบัญชี');
+      } else if (!seller.bankAccount.accountNumber) {
+        throw('กรุณากรอกเลขบัญชี');
+      } else if (!seller.bankAccount.bank) {
+        throw('กรุณากรอกธนาคาร');
       }
 
-      const bank = await db.collection('banks').doc(this.bankAccount.bank);
+      const bank = await db.collection('banks').doc(seller.bankAccount.bank);
       const snapShot = await bank.get();
       if (!snapShot.exists) {
-        throw('bank');
+        throw('ธนาคารไม่ถูกต้อง');
       } else {
-        this.bankAccount.bank = db.doc('banks/' + this.bankAccount.bank);
+        seller.bankAccount.bank = db.doc('banks/' + seller.bankAccount.bank);
       }
     } catch (error) {
       return error;
@@ -60,13 +85,13 @@ var Seller = (() => {
   Seller.prototype.create = (async () => {
     try {
       const docRef = await db.collection('sellers').add({
-        storeName: this.storeName,
-        firstName: this.firstName,
-        lastName: this.lastName,
-        tel: this.tel,
-        citizenId: this.citizenId,
-        address: this.address,
-        bankAccount: this.bankAccount
+        storeName: seller.storeName,
+        firstName: seller.firstName,
+        lastName: seller.lastName,
+        tel: seller.tel,
+        citizenId: seller.citizenId,
+        address: seller.address,
+        bankAccount: seller.bankAccount
       });
       return docRef;
     } catch (error) {
