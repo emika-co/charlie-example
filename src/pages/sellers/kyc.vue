@@ -195,7 +195,11 @@ export default {
       }
     }
   },
-  created () {
+  async created () {
+    await this.$store.dispatch('seller/initStore')
+    if (this.$store.getters['seller/hasStore']) {
+      this.$router.push(this.$store.getters['seller/getRedirectURL'])
+    }
     this.$store.dispatch('setPageTitle', 'สมัครเป็นผู้ขาย')
     this.getBankList()
   },

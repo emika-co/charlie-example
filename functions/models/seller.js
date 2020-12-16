@@ -76,8 +76,14 @@ var Seller = (() => {
         seller.bankAccount.bank = db.doc('banks/' + seller.bankAccount.bank);
       }
 
+      const sellerRef = await db.collection('sellers').where('uid', '==', seller.uid);
+      const sellerSnapshot = await sellerRef.get();
+      if (sellerSnapshot.size) {
+        throw('บัญชีนี้เคยสมัครเป็นผู้ขายแล้ว');
+      }
+
       // check duplicate storeName
-      const storeRef = await db.collection('stores').where('storeName', '==', seller.storeName)
+      const storeRef = await db.collection('stores').where('storeName', '==', seller.storeName);
       const storeSnapshot = await storeRef.get();
       if (storeSnapshot.size) {
         throw('ชื่อร้านค้าถูกใช้งานแล้ว');
