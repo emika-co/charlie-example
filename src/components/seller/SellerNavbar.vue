@@ -7,7 +7,7 @@
     >
       <span class="navbar-toggler-icon" />
     </button>
-    <nuxt-link to="/" class="navbar-brand mx-auto">
+    <nuxt-link to="/sellers/stores" class="navbar-brand mx-auto">
       <img src="~/assets/logo.svg" alt="logo">
     </nuxt-link>
   </nav>

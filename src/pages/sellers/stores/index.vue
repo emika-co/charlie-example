@@ -1,10 +1,11 @@
 <template>
   <div>
-    <Nuxt />
+    index
   </div>
 </template>
 
 <script>
 export default {
+  middleware: ['auth', 'seller']
 }
 </script>

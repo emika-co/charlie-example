@@ -18,7 +18,8 @@
     "core-js": "^3.6.5",
     "firebase": "^8.1.1",
     "js-cookie": "^2.2.1",
-    "nuxt": "^2.14.6"
+    "nuxt": "^2.14.6",
+    "sweetalert2": "^10.12.5"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^3.1.0",
