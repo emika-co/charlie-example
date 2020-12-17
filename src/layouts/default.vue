@@ -19,7 +19,9 @@ export default {
     await this.$store.dispatch('seller/initStore')
     this.loading = false
     if (this.$store.getters['user/isAuthenticated']) {
-      this.$router.push(this.$store.getters['user/getAuthRedirectURL'])
+      if (this.$route.path === '/') {
+        this.$router.push(this.$store.getters['user/getAuthRedirectURL'])
+      }
     }
   }
 }
