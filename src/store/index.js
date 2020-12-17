@@ -35,6 +35,10 @@ export const actions = {
       const auth = JSON.parse(cookies.auth)
       commit('user/setUser', auth)
     }
+    if (cookies.store) {
+      const store = JSON.parse(cookies.store)
+      commit('seller/setStore', store)
+    }
   },
   setPageTitle ({ commit }, pageTitle) {
     commit('setPageTitle', pageTitle)

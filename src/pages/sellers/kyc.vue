@@ -1,5 +1,6 @@
 <template>
   <div class="container-fluid">
+    <Loading :is-loading="loading" />
     <div class="row my-2">
       <div class="col-12 mx-0 px-0">
         <label class="my-1 mx-3 text-muted">รายละเอียดบัญชี</label>
@@ -133,6 +134,7 @@ export default {
   middleware: ['auth', 'kyc'],
   data () {
     return {
+      loading: false,
       banks: [],
       store: {
         storeName: '',
@@ -193,13 +195,18 @@ export default {
       }
     }
   },
-  created () {
+  async created () {
+    await this.$store.dispatch('seller/initStore')
+    if (this.$store.getters['seller/hasStore']) {
+      this.$router.push(this.$store.getters['seller/getRedirectURL'])
+    }
     this.$store.dispatch('setPageTitle', 'สมัครเป็นผู้ขาย')
     this.getBankList()
   },
   methods: {
     async getBankList () {
       try {
+        this.loading = true
         const bankRef = firestore.collection('banks')
         const snapshot = await bankRef.get()
         snapshot.forEach((doc) => {
@@ -211,6 +218,7 @@ export default {
         // eslint-disable-next-line no-console
         console.log(error)
       }
+      this.loading = false
     },
     resetForm () {
       this.storeValidator.storeName = false
@@ -272,11 +280,12 @@ export default {
       if (!this.isStoreValid()) {
         return
       }
+      this.loading = true
       const createSellers = functions.httpsCallable('createSellers')
       createSellers(this.store)
         .then((result) => {
           const store = {
-            id: result.data._id,
+            id: result.data.storeId,
             name: this.store.storeName
           }
           this.$store.dispatch('seller/setStore', store)
@@ -294,6 +303,7 @@ export default {
             'error'
           )
         })
+      this.loading = false
     }
   }
 }
