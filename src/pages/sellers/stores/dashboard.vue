@@ -73,7 +73,7 @@
 
 <script>
 export default {
-  layout: 'view',
+  layout: 'seller',
   middleware: ['seller'],
   computed: {
     store () {
