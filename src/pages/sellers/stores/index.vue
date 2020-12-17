@@ -27,7 +27,7 @@ export default {
     height: 100vh;
   }
   #background {
-    background-image: url('/_nuxt/assets/background.svg');
+    background-image: url('~assets/background.svg');
     background-repeat: no-repeat;
     background-position: center;
   }
