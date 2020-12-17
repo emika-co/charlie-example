@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Loading :is-loading="loading" />
+    <Loading class="custom-layout" :is-loading="loading" />
     <Nuxt />
   </div>
 </template>
@@ -26,3 +26,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.custom-layout {
+  margin-left: 0px !important;
+}
+</style>
