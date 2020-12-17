@@ -3,9 +3,14 @@
     <div class="sidebar-heading">
       <img src="~/assets/logo.svg" alt="logo">
     </div>
-    <div v-if="!store" class="text-center">
+    <div class="text-center">
       <button class="btn btn-primary py-2 px-5 mx-auto" @click="goTo('/sellers/kyc')">
-        สมัครเป็นผู้ขาย
+        <span v-if="store">
+          หน้าจัดการขาย
+        </span>
+        <span v-else>
+          สมัครเป็นผู้ขาย
+        </span>
       </button>
     </div>
     <hr>
