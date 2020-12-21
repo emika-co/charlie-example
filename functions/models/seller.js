@@ -20,6 +20,10 @@ var seller = {
     accountNumber: '',
     bank: ''
   },
+  dashboard: {
+    totalWealth: 0,
+    updatedAt: new Date()
+  },
   valid: false
 };
 
