@@ -322,16 +322,4 @@ export default {
 .card-body {
   padding: 0.75rem;
 }
-.input-group-text {
-  background-color: #fff;
-  border: none;
-  font-weight: 300;
-}
-.form-control {
-  border: none;
-  border-radius: 0;
-}
-.input-group {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
 </style>
