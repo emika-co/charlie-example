@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar-light bg-white">
     <div class="app-link" @click="back()">
       <span class="material-icons float-left">
         arrow_back_ios
@@ -23,7 +23,7 @@ export default {
   },
   methods: {
     back () {
-      this.$store.dispatch('backToPreviousPage')
+      this.$router.go(-1)
     }
   }
 }
