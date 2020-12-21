@@ -97,31 +97,18 @@ var Seller = (() => {
 
   Seller.prototype.create = (async () => {
     try {
-      const result = {
-        sellerId: '',
-        storeId: ''
-      }
-      await db.runTransaction(async (transaction) => {
-        const sellersDocRef = db.collection('sellers').doc()
-        const storesDocRef = db.collection('stores').doc()
-        await transaction.create(sellersDocRef, {
-          firstName: seller.firstName,
-          lastName: seller.lastName,
-          tel: seller.tel,
-          citizenId: seller.citizenId,
-          address: seller.address,
-          bankAccount: seller.bankAccount,
-          uid: seller.uid,
-          valid: false
-        })
-        await transaction.create(storesDocRef, {
-          seller: db.doc('sellers/' + sellersDocRef.id),
-          storeName: seller.storeName
-        })
-        result.sellerId = sellersDocRef.id
-        result.storeId = storesDocRef.id
+      const sellersDocRef = await db.collection('sellers').add({
+        storeName: seller.storeName,
+        firstName: seller.firstName,
+        lastName: seller.lastName,
+        tel: seller.tel,
+        citizenId: seller.citizenId,
+        address: seller.address,
+        bankAccount: seller.bankAccount,
+        uid: seller.uid,
+        valid: false
       })
-      return result
+      return sellersDocRef
     } catch (error) {
       return error;
     }

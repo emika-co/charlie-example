@@ -12,8 +12,7 @@ exports.createSellers = functions.https.onCall(async (data, context) => {
   try {
     const docRef = await s.create()
     return {
-      storeId: docRef.storeId,
-      sellerId: docRef.sellerId
+      _id: docRef.id
     }
   } catch (error) {
     console.log(error)

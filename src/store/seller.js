@@ -6,7 +6,7 @@ export const state = () => ({
     name: ''
   },
   registerURL: '/sellers/kyc',
-  redirectURL: '/sellers/stores'
+  redirectURL: '/sellers'
 })
 
 export const mutations = {
@@ -44,23 +44,17 @@ export const actions = {
       const snapshot = await firestore.collection('sellers').where('uid', '==', user.uid).get()
       if (snapshot.size) {
         let sellerId = ''
+        let sellerName = ''
         snapshot.forEach((doc) => {
           sellerId = doc.id
+          sellerName = doc.data().storeName
         })
-        const sellerDocRef = firestore.collection('sellers').doc(sellerId)
-        const sellerSnapshot = await firestore.collection('stores').where('seller', '==', sellerDocRef).get()
-        if (sellerSnapshot.size) {
-          const store = {
-            id: '',
-            name: ''
-          }
-          sellerSnapshot.forEach((doc) => {
-            store.id = doc.id
-            store.name = doc.data().storeName
-          })
-          this.$cookies.set('store', store, { expires: 1 })
-          commit('setStore', store)
+        const store = {
+          id: sellerId,
+          name: sellerName
         }
+        this.$cookies.set('store', store, { expires: 1 })
+        commit('setStore', store)
       }
     } catch (error) {
       // eslint-disable-next-line no-console

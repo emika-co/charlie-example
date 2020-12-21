@@ -285,7 +285,7 @@ export default {
       createSellers(this.store)
         .then((result) => {
           const store = {
-            id: result.data.storeId,
+            id: result.data._id,
             name: this.store.storeName
           }
           this.$store.dispatch('seller/setStore', store)

@@ -4,7 +4,7 @@
       <img src="~/assets/logo.svg" alt="logo">
     </div>
     <div class="text-center">
-      <nuxt-link to="/sellers/stores/dashboard" class="btn btn-primary py-2 px-5 mx-auto">
+      <nuxt-link to="/sellers/dashboard" class="btn btn-primary py-2 px-5 mx-auto">
         แดชบอร์ดผู้ขาย
       </nuxt-link>
     </div>
