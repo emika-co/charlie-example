@@ -8,7 +8,7 @@
         คุณสามารถลงขายสินค้าของคุณได้ทันที โดยการกดปุ่มด้านล่าง
       </p>
       <div class="col-8 mx-auto mt-4">
-        <nuxt-link to="/sellers/items" class="btn btn-primary w-100">
+        <nuxt-link to="/sellers/dashboard" class="btn btn-primary w-100">
           เริ่มขายสินค้าเลย
         </nuxt-link>
       </div>

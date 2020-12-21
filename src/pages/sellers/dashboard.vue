@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="row bg-white px-3">
-        <div class="col-12 app-link mr-5 p-3">
+        <div class="col-12 app-link mr-5 p-3" @click="goTo('/sellers/items')">
           <div class="float-left mr-3">
             <img src="~/assets/package.svg" class="icon-link">
           </div>
@@ -104,6 +104,9 @@ export default {
           this.dashboard = store.dashboard
         })
       }
+    },
+    goTo (url) {
+      this.$store.dispatch('goToPage', url)
     }
   }
 }
