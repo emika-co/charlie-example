@@ -1,5 +1,6 @@
 <template>
   <div id="wrapper" class="d-flex">
+    <Loading />
     <seller-sidebar />
     <div id="page-content-wrapper">
       <nav-no-logo />

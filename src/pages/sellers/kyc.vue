@@ -1,6 +1,5 @@
 <template>
   <div class="container-fluid">
-    <Loading :is-loading="loading" />
     <div class="row my-2">
       <div class="col-12 mx-0 px-0">
         <label class="my-1 mx-3 text-muted">รายละเอียดบัญชี</label>
@@ -131,10 +130,9 @@ import Swal from 'sweetalert2'
 import { firestore, functions } from '~/plugins/firebase'
 export default {
   layout: 'view',
-  middleware: ['auth', 'kyc'],
+  // middleware: ['auth', 'kyc'],
   data () {
     return {
-      loading: false,
       banks: [],
       store: {
         storeName: '',
@@ -196,17 +194,24 @@ export default {
     }
   },
   async created () {
-    await this.$store.dispatch('seller/initStore')
-    if (this.$store.getters['seller/hasStore']) {
-      this.$router.push(this.$store.getters['seller/getRedirectURL'])
+    this.$store.dispatch('loading', true)
+    try {
+      await this.$store.dispatch('seller/initStore')
+      if (this.$store.getters['seller/hasStore']) {
+        this.$store.dispatch('loading', false)
+        this.$router.push(this.$store.getters['seller/getRedirectURL'])
+      }
+      this.$store.dispatch('setPageTitle', 'สมัครเป็นผู้ขาย')
+      this.getBankList()
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error)
     }
-    this.$store.dispatch('setPageTitle', 'สมัครเป็นผู้ขาย')
-    this.getBankList()
+    this.$store.dispatch('loading', false)
   },
   methods: {
     async getBankList () {
       try {
-        this.loading = true
         const bankRef = firestore.collection('banks')
         const snapshot = await bankRef.get()
         snapshot.forEach((doc) => {
@@ -218,7 +223,6 @@ export default {
         // eslint-disable-next-line no-console
         console.log(error)
       }
-      this.loading = false
     },
     resetForm () {
       this.storeValidator.storeName = false
@@ -280,7 +284,7 @@ export default {
       if (!this.isStoreValid()) {
         return
       }
-      this.loading = true
+      this.$store.dispatch('loading', true)
       const createSellers = functions.httpsCallable('createSellers')
       createSellers(this.store)
         .then((result) => {
@@ -303,7 +307,7 @@ export default {
             'error'
           )
         })
-      this.loading = false
+      this.$store.dispatch('loading', false)
     }
   }
 }

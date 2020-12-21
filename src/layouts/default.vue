@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Loading class="custom-layout" :is-loading="loading" />
+    <Loading />
     <Nuxt />
   </div>
 </template>
@@ -14,21 +14,21 @@ export default {
     }
   },
   async beforeMount () {
-    this.loading = true
-    await this.$store.dispatch('user/onAuth')
-    await this.$store.dispatch('seller/initStore')
-    this.loading = false
-    if (this.$store.getters['user/isAuthenticated']) {
-      if (this.$route.path === '/') {
-        this.$router.push(this.$store.getters['user/getAuthRedirectURL'])
+    this.$store.dispatch('loading', true)
+    try {
+      await this.$store.dispatch('user/onAuth')
+      await this.$store.dispatch('seller/initStore')
+      if (this.$store.getters['user/isAuthenticated']) {
+        if (this.$route.path === '/') {
+          this.$store.dispatch('loading', false)
+          this.$router.push(this.$store.getters['user/getAuthRedirectURL'])
+        }
       }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error)
     }
+    this.$store.dispatch('loading', false)
   }
 }
 </script>
-
-<style scoped>
-.custom-layout {
-  margin-left: 0px !important;
-}
-</style>
