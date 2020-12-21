@@ -1,7 +1,8 @@
 export const state = () => ({
   pageTitle: '',
   previousPage: '',
-  currentPage: ''
+  currentPage: '',
+  loading: false
 })
 
 export const mutations = {
@@ -13,6 +14,9 @@ export const mutations = {
   },
   setCurrentPage (state, payload) {
     state.currentPage = payload
+  },
+  setLoading (state, payload) {
+    state.loading = payload
   }
 }
 
@@ -25,6 +29,9 @@ export const getters = {
   },
   getCurrentPage (state) {
     return state.currentPage
+  },
+  isLoading (state) {
+    return state.loading
   }
 }
 
@@ -55,5 +62,8 @@ export const actions = {
   },
   setCurrentPage ({ commit }, currentPage) {
     commit('setCurrentPage', currentPage)
+  },
+  loading ({ commit }, isLoading) {
+    commit('setLoading', isLoading)
   }
 }

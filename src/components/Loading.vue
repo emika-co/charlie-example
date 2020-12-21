@@ -10,10 +10,9 @@
 
 <script>
 export default {
-  props: {
-    isLoading: {
-      type: Boolean,
-      default: false
+  computed: {
+    isLoading () {
+      return this.$store.getters.isLoading
     }
   }
 }
@@ -27,7 +26,6 @@ export default {
   height: 100%;
   background: rgba(34, 34, 34, 0.7);
   z-index: 1000;
-  margin-left: -15px;
 }
 .content {
   margin: 0 auto;

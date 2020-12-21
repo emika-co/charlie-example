@@ -9,9 +9,5 @@ service cloud.firestore {
     	allow read: if request.auth != null && request.auth.uid == resource.data.uid;
       allow write: if false;
     }
-    match /stores/{store} {
-    	allow read: if true;
-      allow write: if false;
-    }
   }
 }

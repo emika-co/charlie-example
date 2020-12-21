@@ -1,11 +1,14 @@
 <template>
   <div>
-    dashboard
+    Item Page
   </div>
 </template>
 
 <script>
 export default {
-  middleware: ['seller']
+
 }
 </script>
+
+<style>
+</style>
