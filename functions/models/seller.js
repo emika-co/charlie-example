@@ -1,5 +1,5 @@
-const admin = require('firebase-admin')
-const db = admin.firestore()
+const admin = require('firebase-admin');
+const db = admin.firestore();
 
 var seller = {
   uid: '',
@@ -111,8 +111,8 @@ var Seller = (() => {
         bankAccount: seller.bankAccount,
         uid: seller.uid,
         valid: false
-      })
-      return sellersDocRef
+      });
+      return sellersDocRef;
     } catch (error) {
       return error;
     }
@@ -121,5 +121,4 @@ var Seller = (() => {
   return Seller;
 })();
 
-module.exports = Seller
-  
+module.exports = Seller;
