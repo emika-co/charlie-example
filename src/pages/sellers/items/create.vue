@@ -57,15 +57,15 @@
           <div class="mb-2">
             รูปสินค้า
           </div>
-          <div class="upload-box files text-center mb-3">
+          <div class="upload-box files text-center mb-3" :class="{ 'upload-box-invalid': itemValidator.cover }" @click="uploadCover()">
             <img src="~/assets/upload-cloud.svg">
             <p class="text-muted mb-1">
-              สามารถใส่รูปภาพได้สูงสุด 1 รูป
+              {{ item.cover.description }}
             </p>
             <p class="text-muted sub-text">
-              สเกลภาพ 1:1 ขนาดไม่เกิน 2 เมกาไบต์
+              {{ item.cover.subDescription }}
             </p>
-            <input type="file" class="form-control d-none" multiple="">
+            <input ref="cover" type="file" class="form-control d-none" @change="selectedCover()">
           </div>
           <div class="input-group mb-3" :class="{ 'field-invalid': itemValidator.file }">
             <div id="file" class="w-100">
@@ -105,13 +105,37 @@ export default {
         name: false,
         cost: false,
         description: false,
+        cover: false,
         file: false
       },
       item: {
         name: '',
         cost: 0,
         description: '',
+        cover: {
+          content: '',
+          description: 'สามารถใส่รูปภาพได้สูงสุด 1 รูป',
+          subDescription: 'สเกลภาพ 1:1 ขนาดไม่เกิน 2 เมกาไบต์'
+        },
         file: ''
+      }
+    }
+  },
+  methods: {
+    uploadCover () {
+      this.$refs.cover.click()
+    },
+    selectedCover () {
+      this.itemValidator.cover = false
+      const cover = this.$refs.cover.files[0]
+      if (cover.type !== 'image/jpeg' && cover.type !== 'image/png') {
+        this.itemValidator.cover = true
+        this.item.cover.description = 'กรุณาใช้ไฟล์นามสกุล jpg/jpeg หรือ png เท่านั้น'
+      } else if (cover.size > 2000000) {
+        this.itemValidator.cover = true
+        this.item.cover.description = 'ขนาดรูปต้องไม่เกิน 2 เมกาไบต์'
+      } else {
+        this.item.cover.description = this.$refs.cover.files[0].name
       }
     }
   }
@@ -141,5 +165,12 @@ img {
   border: 1px dashed rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   padding: 1.5rem;
+  cursor: pointer;
+}
+.upload-box-invalid {
+  border: 1px dashed rgba(255, 0, 0, 1);
+  border-radius: 5px;
+  padding: 1.5rem;
+  cursor: pointer;
 }
 </style>
