@@ -41,9 +41,9 @@
         </div>
       </div>
       <div class="col-12">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+        <nuxt-link to="/sellers/items/create" class="btn btn-primary">
           ลงสินค้าใหม่
-        </button>
+        </nuxt-link>
       </div>
     </div><!-- Modal -->
   </div>
