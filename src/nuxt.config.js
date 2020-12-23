@@ -34,7 +34,8 @@ export default {
   plugins: [
     '~/plugins/firebase',
     '~/plugins/cookie',
-    '~/plugins/nuxt-client-init'
+    '~/plugins/nuxt-client-init',
+    '~/plugins/alert'
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)

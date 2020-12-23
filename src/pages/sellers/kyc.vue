@@ -126,7 +126,6 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2'
 import { firestore, functions } from '~/plugins/firebase'
 export default {
   layout: 'view',
@@ -280,33 +279,34 @@ export default {
       }
       return false
     },
-    submitRegister () {
+    async submitRegister () {
       if (!this.isStoreValid()) {
         return
       }
       this.$store.dispatch('loading', true)
       const createSellers = functions.httpsCallable('createSellers')
-      createSellers(this.store)
-        .then((result) => {
-          const store = {
-            id: result.data._id,
-            name: this.store.storeName
-          }
-          this.$store.dispatch('seller/setStore', store)
-          Swal.fire(
-            'บันทึกข้อมูลสำเร็จ',
-            '',
-            'success'
-          )
-          this.$router.push(this.$store.getters['seller/getRedirectURL'])
-        })
-        .catch((error) => {
-          Swal.fire(
-            'เกิดข้อผิดพลาด',
-            error.message,
-            'error'
-          )
-        })
+      try {
+        const result = await createSellers(this.store)
+        const store = {
+          id: result.data._id,
+          name: this.store.storeName
+        }
+        this.$store.dispatch('seller/setStore', store)
+        this.$swal.fire(
+          'บันทึกข้อมูลสำเร็จ',
+          '',
+          'success'
+        )
+        this.$store.dispatch('loading', false)
+        this.$router.push(this.$store.getters['seller/getRedirectURL'])
+        return
+      } catch (error) {
+        this.$swal.fire(
+          'เกิดข้อผิดพลาด',
+          error.message,
+          'error'
+        )
+      }
       this.$store.dispatch('loading', false)
     }
   }

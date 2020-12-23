@@ -6,7 +6,7 @@ service cloud.firestore {
     	allow write: if false;
     }
     match /sellers/{seller} {
-    	allow read: if request.auth != null && request.auth.uid == resource.data.uid;
+    	allow read: if request.auth != null && request.auth.uid == seller;
       allow write: if false;
     }
   }

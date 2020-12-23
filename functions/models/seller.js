@@ -69,25 +69,25 @@ var Seller = (() => {
       } else if (!seller.bankAccount.accountNumber) {
         throw('กรุณากรอกเลขบัญชี');
       } else if (!seller.bankAccount.bank) {
-        throw('กรุณากรอกธนาคาร');
+        throw('กรุณาเลือกธนาคาร');
       }
 
       const bankRef = await db.collection('banks').doc(seller.bankAccount.bank);
-      const snapShot = await bankRef.get();
-      if (!snapShot.exists) {
+      const snapshot = await bankRef.get();
+      if (!snapshot.exists) {
         throw('ธนาคารไม่ถูกต้อง');
       } else {
         seller.bankAccount.bank = db.doc('banks/' + seller.bankAccount.bank);
       }
 
-      const sellerRef = await db.collection('sellers').where('uid', '==', seller.uid);
+      const sellerRef = await db.collection('sellers').doc(seller.uid);
       const sellerSnapshot = await sellerRef.get();
-      if (sellerSnapshot.size) {
+      if (sellerSnapshot.exists) {
         throw('บัญชีนี้เคยสมัครเป็นผู้ขายแล้ว');
       }
 
       // check duplicate storeName
-      const storeRef = await db.collection('stores').where('storeName', '==', seller.storeName);
+      const storeRef = await db.collection('sellers').where('storeName', '==', seller.storeName);
       const storeSnapshot = await storeRef.get();
       if (storeSnapshot.size) {
         throw('ชื่อร้านค้าถูกใช้งานแล้ว');
@@ -101,7 +101,7 @@ var Seller = (() => {
 
   Seller.prototype.create = (async () => {
     try {
-      const sellersDocRef = await db.collection('sellers').add({
+      const sellersDocRef = await db.collection('sellers').doc(seller.uid).set({
         storeName: seller.storeName,
         firstName: seller.firstName,
         lastName: seller.lastName,
@@ -110,8 +110,10 @@ var Seller = (() => {
         address: seller.address,
         bankAccount: seller.bankAccount,
         uid: seller.uid,
-        valid: false
+        valid: false,
+        dashboard: seller.dashboard
       });
+      sellersDocRef.id = seller.uid;
       return sellersDocRef;
     } catch (error) {
       return error;

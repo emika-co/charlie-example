@@ -76,7 +76,7 @@
 import { firestore } from '~/plugins/firebase'
 export default {
   layout: 'seller',
-  middleware: ['seller'],
+  middleware: ['auth', 'seller'],
   data () {
     return {
       dashboard: {
