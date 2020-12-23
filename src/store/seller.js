@@ -61,7 +61,7 @@ export const actions = {
   async setStoreFromCookie ({ commit }, store) {
     const snapshot = await firestore.collection('sellers').doc(store.id).get()
     if (snapshot.exists) {
-      commit('setStore', store)
+      return commit('setStore', store)
     }
     this.$cookies.remove('store')
     this.app.router.push('/')
