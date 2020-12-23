@@ -22,7 +22,7 @@ export const getters = {
 }
 
 export const actions = {
-  nuxtClientInit ({ commit, dispatch }, { $cookies }) {
+  async nuxtClientInit ({ commit, dispatch }, { $cookies }) {
     const cookies = $cookies.get()
     if (cookies.auth) {
       const auth = JSON.parse(cookies.auth)
@@ -30,7 +30,7 @@ export const actions = {
     }
     if (cookies.store) {
       const store = JSON.parse(cookies.store)
-      dispatch('seller/setStoreFromCookie', store)
+      await dispatch('seller/setStoreFromCookie', store)
     }
   },
   setPageTitle ({ commit }, pageTitle) {
