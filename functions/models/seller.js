@@ -43,39 +43,39 @@ var Seller = (() => {
   Seller.prototype.validate = (async () => {
     try {
       if (!seller.uid) {
-        throw('กรุณาล็อคอินใหม่');
+        return 'กรุณาล็อคอินใหม่';
       } else if (!seller.storeName) {
-        throw('กรุณากรอกชื่อร้านค้า');
+        return 'กรุณากรอกชื่อร้านค้า';
       } else if (!seller.firstName) {
-        throw('กรุณากรอกชื่อ');
+        return 'กรุณากรอกชื่อ';
       } else if (!seller.lastName) {
-        throw('กรุณากรอกนามสกุล');
+        return 'กรุณากรอกนามสกุล';
       } else if (!seller.tel) {
-        throw('กรุณากรอกเบอร์โทร');
+        return 'กรุณากรอกเบอร์โทร';
       } else if (!seller.citizenId) {
-        throw('กรุณากรอกเลขบัตรประชาชน');
+        return 'กรุณากรอกเลขบัตรประชาชน';
       } else if (!seller.address.detail) {
-        throw('กรุณากรอกที่อยู่');
+        return 'กรุณากรอกที่อยู่';
       } else if (!seller.address.subDistrict) {
-        throw('กรุณากรอกตำบล/แขวง');
+        return 'กรุณากรอกตำบล/แขวง';
       } else if (!seller.address.district) {
-        throw('กรุณากรอกอำเภอ/เขต');
+        return 'กรุณากรอกอำเภอ/เขต';
       } else if (!seller.address.province) {
-        throw('กรุณากรอกจังหวัด');
+        return 'กรุณากรอกจังหวัด';
       } else if (!seller.address.postal) {
-        throw('กรุณากรอกรหัสไปรษณีย์');
+        return 'กรุณากรอกรหัสไปรษณีย์';
       } else if (!seller.bankAccount.accountName) {
-        throw('กรุณากรอกชื่อบัญชี');
+        return 'กรุณากรอกชื่อบัญชี';
       } else if (!seller.bankAccount.accountNumber) {
-        throw('กรุณากรอกเลขบัญชี');
+        return 'กรุณากรอกเลขบัญชี';
       } else if (!seller.bankAccount.bank) {
-        throw('กรุณาเลือกธนาคาร');
+        return 'กรุณาเลือกธนาคาร';
       }
 
       const bankRef = await db.collection('banks').doc(seller.bankAccount.bank);
       const snapshot = await bankRef.get();
       if (!snapshot.exists) {
-        throw('ธนาคารไม่ถูกต้อง');
+        return 'ธนาคารไม่ถูกต้อง';
       } else {
         seller.bankAccount.bank = db.doc('banks/' + seller.bankAccount.bank);
       }
@@ -83,20 +83,18 @@ var Seller = (() => {
       const sellerRef = await db.collection('sellers').doc(seller.uid);
       const sellerSnapshot = await sellerRef.get();
       if (sellerSnapshot.exists) {
-        throw('บัญชีนี้เคยสมัครเป็นผู้ขายแล้ว');
+        return 'บัญชีนี้เคยสมัครเป็นผู้ขายแล้ว';
       }
 
       // check duplicate storeName
       const storeRef = await db.collection('sellers').where('storeName', '==', seller.storeName);
       const storeSnapshot = await storeRef.get();
       if (storeSnapshot.size) {
-        throw('ชื่อร้านค้าถูกใช้งานแล้ว');
+        return 'ชื่อร้านค้าถูกใช้งานแล้ว';
       }
     } catch (error) {
-      return error;
+      throw error;
     }
-
-    return;
   });
 
   Seller.prototype.create = (async () => {
@@ -116,7 +114,7 @@ var Seller = (() => {
       sellersDocRef.id = seller.uid;
       return sellersDocRef;
     } catch (error) {
-      return error;
+      throw error;
     }
   });
 
