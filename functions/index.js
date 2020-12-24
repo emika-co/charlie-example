@@ -11,3 +11,4 @@ const sellers = require('./sellers');
 // });
 
 exports.createSellers = sellers.createSellers;
+exports.createItem = sellers.createItem;
