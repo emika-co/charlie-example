@@ -51,7 +51,10 @@
 
 <script>
 export default {
-  // layout: "app"
+  layout: 'view',
+  created () {
+    this.$store.dispatch('setPageTitle', 'สินค้าของฉัน')
+  }
 }
 </script>
 
