@@ -76,7 +76,7 @@
 import { firestore } from '~/plugins/firebase'
 export default {
   layout: 'seller',
-  middleware: ['seller'],
+  middleware: ['auth', 'seller'],
   data () {
     return {
       dashboard: {
@@ -106,7 +106,7 @@ export default {
       }
     },
     goTo (url) {
-      this.$store.dispatch('goToPage', url)
+      this.$router.push(url)
     }
   }
 }
@@ -179,9 +179,6 @@ img {
     font-weight: 600;
     text-transform: capitalize;
     text-align: center;
-}
-.bg-white {
-  background-color: #FFFFFF;
 }
 .money {
   font-size: 2.3rem;

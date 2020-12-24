@@ -6,7 +6,8 @@ export const state = () => ({
     name: ''
   },
   registerURL: '/sellers/kyc',
-  redirectURL: '/sellers'
+  redirectURL: '/sellers',
+  dashboardURL: '/sellers/dashboard'
 })
 
 export const mutations = {
@@ -31,6 +32,9 @@ export const getters = {
       return true
     }
     return false
+  },
+  getDashboardURL (state) {
+    return state.dashboardURL
   }
 }
 
@@ -41,17 +45,11 @@ export const actions = {
       if (!user.uid) {
         return
       }
-      const snapshot = await firestore.collection('sellers').where('uid', '==', user.uid).get()
-      if (snapshot.size) {
-        let sellerId = ''
-        let sellerName = ''
-        snapshot.forEach((doc) => {
-          sellerId = doc.id
-          sellerName = doc.data().storeName
-        })
+      const snapshot = await firestore.collection('sellers').doc(user.uid).get()
+      if (snapshot.exists) {
         const store = {
-          id: sellerId,
-          name: sellerName
+          id: user.uid,
+          name: snapshot.data().storeName
         }
         this.$cookies.set('store', store, { expires: 1 })
         commit('setStore', store)
@@ -63,5 +61,13 @@ export const actions = {
   },
   setStore ({ commit }, store) {
     commit('setStore', store)
+  },
+  async setStoreFromCookie ({ commit }, store) {
+    const snapshot = await firestore.collection('sellers').doc(store.id).get()
+    if (snapshot.exists) {
+      return commit('setStore', store)
+    }
+    this.$cookies.remove('store')
+    this.app.router.push('/')
   }
 }

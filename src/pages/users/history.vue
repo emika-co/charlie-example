@@ -7,9 +7,6 @@
 <script>
 export default {
   middleware: ['auth'],
-  layout: 'app',
-  created () {
-    this.$store.dispatch('setCurrentPage', '/users/history')
-  }
+  layout: 'app'
 }
 </script>

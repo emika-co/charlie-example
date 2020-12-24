@@ -1,5 +1,5 @@
 <template>
-  <div id="sidebar-wrapper" class="bg-light border-right">
+  <div id="sidebar-wrapper" class="bg-white border-right">
     <div class="sidebar-heading">
       <img src="~/assets/logo.svg" alt="logo">
     </div>

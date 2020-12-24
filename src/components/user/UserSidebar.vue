@@ -1,5 +1,5 @@
 <template>
-  <div id="sidebar-wrapper" class="bg-light border-right">
+  <div id="sidebar-wrapper" class="bg-white border-right">
     <div class="sidebar-heading">
       <img src="~/assets/logo.svg" alt="logo">
     </div>
@@ -36,7 +36,7 @@ export default {
       this.$store.dispatch('user/signOut')
     },
     goTo (url) {
-      this.$store.dispatch('goToPage', url)
+      this.$router.push(url)
     }
   }
 }
