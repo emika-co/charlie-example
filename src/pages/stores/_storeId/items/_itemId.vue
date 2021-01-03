@@ -1,5 +1,5 @@
 <template>
-  <div class="container d-flex justify-content-center">
+  <div class="container">
     <div class="align-self w-100">
       <div class="row my-2">
         <div class="col-8">
