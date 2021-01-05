@@ -1,6 +1,6 @@
 <template>
   <div class="row bg-white mb-2">
-    <div class="col-4 align-self-center p-2">
+    <div class="col-4 align-self-center py-2">
       <img :src="coverImg" class="img-fluid rounded">
     </div>
     <div class="col-8 align-self-center">
