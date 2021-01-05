@@ -9,8 +9,7 @@ var item = {
   description: '',
   cost: 0,
   covers: [],
-  uid: '',
-  seller: '',
+  sid: '',
   files: [],
   tags: []
 };
@@ -21,7 +20,7 @@ var Item = (() => {
     item.name = data.name;
     item.description = data.description;
     item.cost = data.cost;
-    item.uid = data.uid;
+    item.sid = data.uid;
     if (data.covers) {
       item.covers = item.covers.concat(data.covers);
     }
@@ -36,7 +35,7 @@ var Item = (() => {
   Item.prototype.validate = (async () => {
     try {
       console.log(uuidValidate(item.id))
-      if (!item.uid) {
+      if (!item.sid) {
         return 'กรุณาล็อคอินใหม่';
       } else if (!item.id) {
         return 'กรุณารีเฟรชเพจแล้วทำรายการใหม่';
@@ -57,14 +56,6 @@ var Item = (() => {
       if (typeof item.cost !== 'number') {
         return 'ราคาสินค้าต้องเป็นตัวเลขเท่านั้น';
       }
-      // create ref
-      const sellerRef = await db.collection('sellers').doc(item.uid);
-      const snapshot = await sellerRef.get();
-      if (!snapshot.exists){
-        return 'กรุณาล็อคอินใหม่';
-      } else {
-        item.seller = db.doc('sellers/' + item.uid);
-      }
     } catch (error) {
       throw error;
     }
@@ -73,7 +64,7 @@ var Item = (() => {
   Item.prototype.create = (async () => {
     try {
       const itemDocRef = await db.collection('items').doc(item.id).set({
-        seller: item.seller,
+        sid: item.sid,
         name: item.name,
         description: item.description,
         cost: item.cost,
