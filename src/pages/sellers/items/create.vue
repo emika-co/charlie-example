@@ -370,7 +370,8 @@ export default {
           description: this.item.description,
           covers: this.item.cover.url,
           files: this.item.file.url,
-          tags: this.item.tag
+          tags: this.item.tag,
+          storeName: this.store.name
         }
         await createItem(data)
         this.$swal.fire(
