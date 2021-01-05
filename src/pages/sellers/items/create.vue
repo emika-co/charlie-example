@@ -268,12 +268,8 @@ export default {
           this.item.file.progress = progress
           switch (snapshot.state) {
             case storage.TaskState.PAUSED: // or 'paused'
-              // eslint-disable-next-line no-console
-              console.log('Upload is paused')
               break
             case storage.TaskState.RUNNING: // or 'running'
-              // eslint-disable-next-line no-console
-              console.log('Upload is running')
               break
           }
         }, (error) => {
