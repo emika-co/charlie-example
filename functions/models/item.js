@@ -70,7 +70,9 @@ var Item = (() => {
         cost: item.cost,
         covers: item.covers,
         files: item.files,
-        tags: item.tags
+        tags: item.tags,
+        createdAt: new Date(),
+        updatedAt: new Date()
       });
       itemDocRef.id = item.id;
       return itemDocRef;
