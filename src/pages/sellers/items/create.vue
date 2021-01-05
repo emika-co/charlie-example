@@ -268,12 +268,8 @@ export default {
           this.item.file.progress = progress
           switch (snapshot.state) {
             case storage.TaskState.PAUSED: // or 'paused'
-              // eslint-disable-next-line no-console
-              console.log('Upload is paused')
               break
             case storage.TaskState.RUNNING: // or 'running'
-              // eslint-disable-next-line no-console
-              console.log('Upload is running')
               break
           }
         }, (error) => {
@@ -374,7 +370,8 @@ export default {
           description: this.item.description,
           covers: this.item.cover.url,
           files: this.item.file.url,
-          tags: this.item.tag
+          tags: this.item.tag,
+          storeName: this.store.name
         }
         await createItem(data)
         this.$swal.fire(
