@@ -11,7 +11,8 @@ var item = {
   covers: [],
   sid: '',
   files: [],
-  tags: []
+  tags: [],
+  storeName: ''
 };
 
 var Item = (() => {
@@ -21,6 +22,7 @@ var Item = (() => {
     item.description = data.description;
     item.cost = data.cost;
     item.sid = data.uid;
+    item.storeName = data.storeName;
     if (data.covers) {
       item.covers = item.covers.concat(data.covers);
     }
@@ -35,7 +37,7 @@ var Item = (() => {
   Item.prototype.validate = (async () => {
     try {
       console.log(uuidValidate(item.id))
-      if (!item.sid) {
+      if (!item.sid || !item.storeName) {
         return 'กรุณาล็อคอินใหม่';
       } else if (!item.id) {
         return 'กรุณารีเฟรชเพจแล้วทำรายการใหม่';
@@ -71,6 +73,7 @@ var Item = (() => {
         covers: item.covers,
         files: item.files,
         tags: item.tags,
+        storeName: item.storeName,
         createdAt: new Date(),
         updatedAt: new Date()
       });
