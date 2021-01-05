@@ -41,7 +41,7 @@ export default {
   methods: {
     async getItems () {
       if (this.store.id) {
-        const itemRef = firestore.collection('items').where('sid', '==', this.store.id).orderBy('createdAt').limit(25)
+        const itemRef = firestore.collection('items').where('sid', '==', this.store.id).orderBy('createdAt', 'desc').limit(25)
         const snapshot = await itemRef.get()
         snapshot.forEach((doc) => {
           const i = doc.data()
