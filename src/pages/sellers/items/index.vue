@@ -15,11 +15,6 @@
         </p>
       </nuxt-link>
     </div>
-    <!-- <div class="col-12">
-      <nuxt-link to="/sellers/items/create" class="btn btn-primary">
-        ลงสินค้าใหม่
-      </nuxt-link>
-    </div> -->
   </div>
 </template>
 
