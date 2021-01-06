@@ -2,15 +2,10 @@ import Vue from 'vue'
 import VueSanitize from 'vue-sanitize'
 
 const options = {
-  // allowedTags: ['a', 'b'],
-  // allowedAttributes: {
-  //   a: ['href']
-  // }
+  allowedTags: ['a', 'b', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'li'],
+  allowedAttributes: {
+    a: ['href']
+  }
 }
 
 Vue.use(VueSanitize, options)
-
-// eslint-disable-next-line no-empty-pattern
-// export default ({ }, inject) => {
-//   inject('sanitize', VueSanitize)
-// }
