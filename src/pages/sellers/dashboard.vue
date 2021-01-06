@@ -1,98 +1,70 @@
 <template>
-  <div class="container d-flex justify-content-center">
+  <div class="container-fluid d-flex justify-content-center">
     <div class="align-self w-100">
-      <div class="row" style="padding: 10px;background-color: #FFFFFF;">
-        <div class="col-12" style="padding-top: 15px;text-align: right;">
-          <b>แดชบอร์ดผู้ขาย</b>
-        </div>
-      </div>
-      <div class="row" style="padding: 10px;background-color: #FFFFFF;margin-top:10px">
-        <div class="col-4" style="padding-top:10px;">
-          <p>Odery Store</p>
-        </div>
-        <div class="col-8">
-          <p class="text-muted" style="text-align: right;padding-top: 15px;">
-            รายการที่ถอนได้
-          </p>
+      <div class="row mt-3 p-3 bg-white">
+        <div class="col-12">
+          <div class="float-left mr-2">
+            <img src="~/assets/credit-card.svg" class="mr-3">{{ store.name }}
+          </div>
+          <div class="float-right">
+            <p>รายการที่ถอนได้</p>
+          </div>
         </div>
         <div class="col-12">
-          <p style="text-align: right; font-size: 34px;">
-            34,000 ฿
+          <p class="text-right money">
+            {{ dashboard.totalWealth }} ฿
           </p>
         </div>
       </div>
-      <div class="row" style="padding-top:10px;">
+      <div class="row pt-3">
         <div class="col-12">
-          <p class="text-muted">
+          <span class="text-muted">
             เมนูสำหรับผู้ขาย
-          </p>
+          </span>
         </div>
       </div>
-      <div class="row" style="padding: 10px;background-color: #FFFFFF;">
-        <div class="col-2">
-          <p>icon</p>
-        </div>
-        <div class="col-10">
-          <a href="#">
-            <p style="color:#539AEE">
-              สินค้าของฉัน
-            </p>
-          </a>
+      <div class="row bg-white px-3">
+        <div class="col-12 app-link mr-5 p-3" @click="goTo('/sellers/items')">
+          <div class="float-left mr-3">
+            <img src="~/assets/package.svg" class="icon-link">
+          </div>
+          <span>สินค้าของฉัน</span>
         </div>
         <div class="col-12">
-          <hr class="mt-0">
+          <hr class="my-0">
         </div>
-        <div class="col-2">
-          <p>icon</p>
-        </div>
-        <div class="col-10">
-          <a href="#">
-            <p style="color:#539AEE">
-              ถอนรายได้
-            </p>
-          </a>
+        <div class="col-12 app-link mr-5 p-3">
+          <div class="float-left mr-3">
+            <img src="~/assets/coffee.svg" class="icon-link">
+          </div>
+          <span>ถอนรายได้</span>
         </div>
         <div class="col-12">
-          <hr class="mt-0">
+          <hr class="my-0">
         </div>
-        <div class="col-2">
-          <p>icon</p>
-        </div>
-        <div class="col-10">
-          <a href="#">
-            <p style="color:#539AEE">
-              สินค้าของฉัน
-            </p>
-          </a>
+        <div class="col-12 app-link mr-5 p-3">
+          <div class="float-left mr-3">
+            <img src="~/assets/file.svg" class="icon-link">
+          </div>
+          <span>ประวัติการถอนรายได้</span>
         </div>
         <div class="col-12">
-          <hr class="mt-0">
+          <hr class="my-0">
         </div>
-        <div class="col-2">
-          <p>icon</p>
-        </div>
-        <div class="col-10">
-          <a href="#">
-            <p style="color:#539AEE">
-              ประวัติการถอนรายได้
-            </p>
-          </a>
+        <div class="col-12 app-link mr-5 p-3">
+          <div class="float-left mr-3">
+            <img src="~/assets/file.svg" class="icon-link">
+          </div>
+          <span>ประวัติการขายสินค้า</span>
         </div>
         <div class="col-12">
-          <hr class="mt-0">
+          <hr class="my-0">
         </div>
-        <div class="col-2">
-          <p>icon</p>
-        </div>
-        <div class="col-10">
-          <a href="#">
-            <p style="color:#539AEE">
-              แก้ไขข้อมูลร้านค้า
-            </p>
-          </a>
-        </div>
-        <div class="col-12">
-          <hr class="mt-0">
+        <div class="col-12 app-link mr-5 p-3">
+          <div class="float-left mr-3">
+            <img src="~/assets/setting.svg" class="icon-link">
+          </div>
+          <span>แก้ไขข้อมูลร้านค้า</span>
         </div>
       </div>
     </div>
@@ -100,15 +72,47 @@
 </template>
 
 <script>
+// import Swal from 'sweetalert2'
+import { firestore } from '~/plugins/firebase'
 export default {
-  // layout: "app"
+  layout: 'seller',
+  middleware: ['auth', 'seller'],
+  data () {
+    return {
+      dashboard: {
+        totalWealth: 0,
+        updatedAt: new Date()
+      }
+    }
+  },
+  computed: {
+    store () {
+      return this.$store.getters['seller/getStore']
+    }
+  },
+  created () {
+    this.$store.dispatch('loading', true)
+    this.$store.dispatch('setPageTitle', 'แดชบอร์ดผู้ขาย')
+    this.getDashboard()
+    this.$store.dispatch('loading', false)
+  },
+  methods: {
+    getDashboard () {
+      if (this.store.id) {
+        firestore.collection('sellers').doc(this.store.id).onSnapshot((doc) => {
+          const store = doc.data()
+          this.dashboard = store.dashboard
+        })
+      }
+    },
+    goTo (url) {
+      this.$router.push(url)
+    }
+  }
 }
 </script>
 
 <style scoped>
-.container {
-  height: 100vh;
-}
 img {
   max-width: 100%;
   max-height: 100%;
@@ -175,5 +179,11 @@ img {
     font-weight: 600;
     text-transform: capitalize;
     text-align: center;
+}
+.money {
+  font-size: 2.3rem;
+}
+.icon-link {
+  margin-top: -3px;
 }
 </style>

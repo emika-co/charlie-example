@@ -1,5 +1,6 @@
 <template>
   <div id="wrapper" class="d-flex">
+    <Loading />
     <UserSidebar />
     <div id="page-content-wrapper">
       <UserNavbar />
@@ -10,5 +11,6 @@
 
 <script>
 export default {
+  name: 'App'
 }
 </script>

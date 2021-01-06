@@ -1,5 +1,5 @@
-const admin = require('firebase-admin')
-const db = admin.firestore()
+const admin = require('firebase-admin');
+const db = admin.firestore();
 
 var seller = {
   uid: '',
@@ -20,6 +20,10 @@ var seller = {
     accountNumber: '',
     bank: ''
   },
+  dashboard: {
+    totalWealth: 0,
+    updatedAt: new Date()
+  },
   valid: false
 };
 
@@ -39,68 +43,82 @@ var Seller = (() => {
   Seller.prototype.validate = (async () => {
     try {
       if (!seller.uid) {
-        throw('กรุณาล็อคอินใหม่');
+        return 'กรุณาล็อคอินใหม่';
       } else if (!seller.storeName) {
-        throw('กรุณากรอกชื่อร้านค้า');
+        return 'กรุณากรอกชื่อร้านค้า';
       } else if (!seller.firstName) {
-        throw('กรุณากรอกชื่อ');
+        return 'กรุณากรอกชื่อ';
       } else if (!seller.lastName) {
-        throw('กรุณากรอกนามสกุล');
+        return 'กรุณากรอกนามสกุล';
       } else if (!seller.tel) {
-        throw('กรุณากรอกเบอร์โทร');
+        return 'กรุณากรอกเบอร์โทร';
       } else if (!seller.citizenId) {
-        throw('กรุณากรอกเลขบัตรประชาชน');
+        return 'กรุณากรอกเลขบัตรประชาชน';
       } else if (!seller.address.detail) {
-        throw('กรุณากรอกที่อยู่');
+        return 'กรุณากรอกที่อยู่';
       } else if (!seller.address.subDistrict) {
-        throw('กรุณากรอกตำบล/แขวง');
+        return 'กรุณากรอกตำบล/แขวง';
       } else if (!seller.address.district) {
-        throw('กรุณากรอกอำเภอ/เขต');
+        return 'กรุณากรอกอำเภอ/เขต';
       } else if (!seller.address.province) {
-        throw('กรุณากรอกจังหวัด');
+        return 'กรุณากรอกจังหวัด';
       } else if (!seller.address.postal) {
-        throw('กรุณากรอกรหัสไปรษณีย์');
+        return 'กรุณากรอกรหัสไปรษณีย์';
       } else if (!seller.bankAccount.accountName) {
-        throw('กรุณากรอกชื่อบัญชี');
+        return 'กรุณากรอกชื่อบัญชี';
       } else if (!seller.bankAccount.accountNumber) {
-        throw('กรุณากรอกเลขบัญชี');
+        return 'กรุณากรอกเลขบัญชี';
       } else if (!seller.bankAccount.bank) {
-        throw('กรุณากรอกธนาคาร');
+        return 'กรุณาเลือกธนาคาร';
       }
 
-      const bank = await db.collection('banks').doc(seller.bankAccount.bank);
-      const snapShot = await bank.get();
-      if (!snapShot.exists) {
-        throw('ธนาคารไม่ถูกต้อง');
+      const bankRef = await db.collection('banks').doc(seller.bankAccount.bank);
+      const snapshot = await bankRef.get();
+      if (!snapshot.exists) {
+        return 'ธนาคารไม่ถูกต้อง';
       } else {
         seller.bankAccount.bank = db.doc('banks/' + seller.bankAccount.bank);
       }
-    } catch (error) {
-      return error;
-    }
 
-    return;
+      const sellerRef = await db.collection('sellers').doc(seller.uid);
+      const sellerSnapshot = await sellerRef.get();
+      if (sellerSnapshot.exists) {
+        return 'บัญชีนี้เคยสมัครเป็นผู้ขายแล้ว';
+      }
+
+      // check duplicate storeName
+      const storeRef = await db.collection('sellers').where('storeName', '==', seller.storeName);
+      const storeSnapshot = await storeRef.get();
+      if (storeSnapshot.size) {
+        return 'ชื่อร้านค้าถูกใช้งานแล้ว';
+      }
+    } catch (error) {
+      throw error;
+    }
   });
 
   Seller.prototype.create = (async () => {
     try {
-      const docRef = await db.collection('sellers').add({
+      const sellersDocRef = await db.collection('sellers').doc(seller.uid).set({
         storeName: seller.storeName,
         firstName: seller.firstName,
         lastName: seller.lastName,
         tel: seller.tel,
         citizenId: seller.citizenId,
         address: seller.address,
-        bankAccount: seller.bankAccount
+        bankAccount: seller.bankAccount,
+        uid: seller.uid,
+        valid: false,
+        dashboard: seller.dashboard
       });
-      return docRef;
+      sellersDocRef.id = seller.uid;
+      return sellersDocRef;
     } catch (error) {
-      return error;
+      throw error;
     }
   });
 
   return Seller;
 })();
 
-module.exports = Seller
-  
+module.exports = Seller;

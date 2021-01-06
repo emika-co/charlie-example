@@ -126,11 +126,10 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2'
 import { firestore, functions } from '~/plugins/firebase'
 export default {
   layout: 'view',
-  middleware: ['auth', 'kyc'],
+  // middleware: ['auth', 'kyc'],
   data () {
     return {
       banks: [],
@@ -193,9 +192,21 @@ export default {
       }
     }
   },
-  created () {
-    this.$store.dispatch('setPageTitle', 'สมัครเป็นผู้ขาย')
-    this.getBankList()
+  async created () {
+    this.$store.dispatch('loading', true)
+    try {
+      await this.$store.dispatch('seller/initStore')
+      if (this.$store.getters['seller/hasStore']) {
+        this.$store.dispatch('loading', false)
+        this.$router.push(this.$store.getters['seller/getRedirectURL'])
+      }
+      this.$store.dispatch('setPageTitle', 'สมัครเป็นผู้ขาย')
+      this.getBankList()
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error)
+    }
+    this.$store.dispatch('loading', false)
   },
   methods: {
     async getBankList () {
@@ -268,32 +279,35 @@ export default {
       }
       return false
     },
-    submitRegister () {
+    async submitRegister () {
       if (!this.isStoreValid()) {
         return
       }
+      this.$store.dispatch('loading', true)
       const createSellers = functions.httpsCallable('createSellers')
-      createSellers(this.store)
-        .then((result) => {
-          const store = {
-            id: result.data._id,
-            name: this.store.storeName
-          }
-          this.$store.dispatch('seller/setStore', store)
-          Swal.fire(
-            'บันทึกข้อมูลสำเร็จ',
-            '',
-            'success'
-          )
-          this.$router.push(this.$store.getters['seller/getRedirectURL'])
-        })
-        .catch((error) => {
-          Swal.fire(
-            'เกิดข้อผิดพลาด',
-            error.message,
-            'error'
-          )
-        })
+      try {
+        const result = await createSellers(this.store)
+        const store = {
+          id: result.data._id,
+          name: this.store.storeName
+        }
+        this.$store.dispatch('seller/setStore', store)
+        this.$swal.fire(
+          'บันทึกข้อมูลสำเร็จ',
+          '',
+          'success'
+        )
+        this.$store.dispatch('loading', false)
+        this.$router.push(this.$store.getters['seller/getRedirectURL'])
+        return
+      } catch (error) {
+        this.$swal.fire(
+          'เกิดข้อผิดพลาด',
+          error.message,
+          'error'
+        )
+      }
+      this.$store.dispatch('loading', false)
     }
   }
 }
@@ -307,17 +321,5 @@ export default {
 }
 .card-body {
   padding: 0.75rem;
-}
-.input-group-text {
-  background-color: #fff;
-  border: none;
-  font-weight: 300;
-}
-.form-control {
-  border: none;
-  border-radius: 0;
-}
-.input-group {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 </style>

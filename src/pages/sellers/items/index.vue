@@ -4,28 +4,32 @@
       v-for="(item, index) in items"
       :key="index"
       :name="item.name"
-      :store-name="item.storeName"
+      :cost="item.cost"
       :cover-img="item.covers[0]"
-      :download-link="item.files[0]"
     />
+    <div class="row">
+      <nuxt-link to="/sellers/items/create" class="create-box files text-center w-100 mx-2 mb-3">
+        <img src="~/assets/file-plus.svg">
+        <p class="mb-0">
+          ลงสินค้าใหม่
+        </p>
+      </nuxt-link>
+    </div>
   </div>
 </template>
 
 <script>
-import item from '../../components/user/history/UserItem.vue'
 import { firestore } from '~/plugins/firebase'
 export default {
-  components: { item },
-  middleware: ['auth'],
-  layout: 'app',
+  layout: 'view',
   data () {
     return {
       items: []
     }
   },
   computed: {
-    user () {
-      return this.$store.getters['user/getUser']
+    store () {
+      return this.$store.getters['seller/getStore']
     }
   },
   async created () {
@@ -36,8 +40,8 @@ export default {
   },
   methods: {
     async getItems () {
-      if (this.user.uid) {
-        const itemRef = firestore.collection('inventories').where('uid', '==', this.user.uid).orderBy('createdAt', 'desc').limit(25)
+      if (this.store.id) {
+        const itemRef = firestore.collection('items').where('sid', '==', this.store.id).orderBy('createdAt', 'desc').limit(25)
         const snapshot = await itemRef.get()
         snapshot.forEach((doc) => {
           const i = doc.data()
@@ -49,3 +53,13 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.create-box {
+  color: #539AEE;
+  border: 1px dashed #539AEE;
+  border-radius: 5px;
+  padding: 1.5rem;
+  cursor: pointer;
+}
+</style>

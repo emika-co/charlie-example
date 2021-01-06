@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Loading />
     <Nav />
     <Nuxt />
   </div>
@@ -7,5 +8,6 @@
 
 <script>
 export default {
+  name: 'ViewPage'
 }
 </script>

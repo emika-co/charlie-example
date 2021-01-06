@@ -1,10 +1,10 @@
 <template>
-  <div id="sidebar-wrapper" class="bg-light border-right">
+  <div id="sidebar-wrapper" class="bg-white border-right">
     <div class="sidebar-heading">
       <img src="~/assets/logo.svg" alt="logo">
     </div>
     <div class="text-center">
-      <nuxt-link to="/sellers/stores" class="btn btn-primary py-2 px-5 mx-auto">
+      <nuxt-link to="/sellers/dashboard" class="btn btn-primary py-2 px-5 mx-auto">
         แดชบอร์ดผู้ขาย
       </nuxt-link>
     </div>
