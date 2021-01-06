@@ -17,6 +17,7 @@
         </p>
       </nuxt-link>
     </div>
+    <pagination class="mb-3" />
   </div>
 </template>
 
@@ -26,7 +27,9 @@ export default {
   layout: 'view',
   data () {
     return {
-      items: []
+      items: [],
+      totalItem: 0,
+      limit: 25
     }
   },
   computed: {
@@ -43,13 +46,17 @@ export default {
   methods: {
     async getItems () {
       if (this.store.id) {
-        const itemRef = firestore.collection('items').where('sid', '==', this.store.id).orderBy('createdAt', 'desc').limit(25)
+        const limit = this.limit
+        const itemRef = firestore.collection('items').where('sid', '==', this.store.id).orderBy('createdAt', 'desc')
         const snapshot = await itemRef.get()
-        snapshot.forEach((doc) => {
-          const i = doc.data()
-          i.id = doc.id
+        this.totalItem = snapshot.size
+        let index = 0
+        while (index < limit && index < snapshot.size) {
+          const i = snapshot.docs[index].data()
+          i.id = snapshot.docs[index].id
           this.items.push(i)
-        })
+          index++
+        }
       }
     },
     async copyURL (itemId) {
