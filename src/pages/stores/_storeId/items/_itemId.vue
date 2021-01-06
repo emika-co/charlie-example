@@ -181,16 +181,4 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  height: 100vh;
-}
-.green-checker {
-  filter: invert(48%) sepia(90%) saturate(2800%) hue-rotate(86deg)
-    brightness(90%) contrast(119%);
-  width: 30px;
-  margin-top: -2px;
-}
-.w-fit-content {
-  width: fit-content;
-}
 </style>

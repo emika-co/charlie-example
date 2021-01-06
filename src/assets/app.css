@@ -160,3 +160,7 @@ input[type="color"]:focus,
 .disabled {
   opacity: 0.7;
 }
+
+.w-fit-content {
+  width: fit-content;
+}
