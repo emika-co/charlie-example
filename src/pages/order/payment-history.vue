@@ -68,11 +68,4 @@ img {
 .w-fit-content {
   width: fit-content;
 }
-.text-muted {
-  font-size: 0.7rem;
-}
-#add-to-cart {
-  width: 95px;
-  margin-left: -15px;
-}
 </style>

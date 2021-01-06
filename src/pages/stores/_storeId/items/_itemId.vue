@@ -193,7 +193,4 @@ export default {
 .w-fit-content {
   width: fit-content;
 }
-.text-muted {
-  font-size: 0.7rem;
-}
 </style>
