@@ -42,7 +42,7 @@
         <div class="col-12">
           <hr class="my-0">
         </div>
-        <div class="col-12 app-link mr-5 p-3">
+        <div class="col-12 app-link mr-5 p-3 disabled">
           <div class="float-left mr-3">
             <img src="~/assets/file.svg" class="icon-link">
           </div>
@@ -51,7 +51,7 @@
         <div class="col-12">
           <hr class="my-0">
         </div>
-        <div class="col-12 app-link mr-5 p-3">
+        <div class="col-12 app-link mr-5 p-3 disabled">
           <div class="float-left mr-3">
             <img src="~/assets/file.svg" class="icon-link">
           </div>
@@ -60,7 +60,7 @@
         <div class="col-12">
           <hr class="my-0">
         </div>
-        <div class="col-12 app-link mr-5 p-3">
+        <div class="col-12 app-link mr-5 p-3 disabled">
           <div class="float-left mr-3">
             <img src="~/assets/setting.svg" class="icon-link">
           </div>
@@ -126,13 +126,6 @@ img {
 }
 .w-fit-content {
   width: fit-content;
-}
-.text-muted {
-  font-size: 0.7rem;
-}
-#add-to-cart {
-  width: 95px;
-  margin-left: -15px;
 }
 .files input {
     outline: 2px dashed #92b0b3;
