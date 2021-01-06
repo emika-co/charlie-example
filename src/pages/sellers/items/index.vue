@@ -3,9 +3,11 @@
     <item
       v-for="(item, index) in items"
       :key="index"
+      :item-id="item.id"
       :name="item.name"
       :cost="item.cost"
       :cover-img="item.covers[0]"
+      @copyURL="copyURL"
     />
     <div class="row">
       <nuxt-link to="/sellers/items/create" class="create-box files text-center w-100 mx-2 mb-3">
@@ -48,6 +50,27 @@ export default {
           i.id = doc.id
           this.items.push(i)
         })
+      }
+    },
+    async copyURL (itemId) {
+      try {
+        // console.log(this.$toast)
+        if (this.store.id) {
+          const url = `${window.location.origin}/stores/${this.store.id}/items/${itemId}`
+          await this.$copyText(url)
+          this.$toast.success('คัดลอกลิ้งลงในคลิปบอร์ด')
+          setTimeout(() => {
+            this.$toast.clear()
+          }, 3000)
+        } else {
+          throw new Error('URL not found')
+        }
+      } catch (error) {
+        this.$swal.fire(
+          'เกิดข้อผิดพลาด',
+          '',
+          'error'
+        )
       }
     }
   }

@@ -17,6 +17,10 @@
         <a href="#">
           แก้ไข
         </a>
+        |
+        <span class="app-link" @click="show()">
+          คัดลอกลิ้ง
+        </span>
       </span>
     </div>
   </div>
@@ -25,6 +29,10 @@
 <script>
 export default {
   props: {
+    itemId: {
+      default: '',
+      type: String
+    },
     name: {
       default: '',
       type: String
@@ -36,6 +44,11 @@ export default {
     coverImg: {
       default: '',
       type: String
+    }
+  },
+  methods: {
+    show () {
+      this.$emit('copyURL', this.itemId)
     }
   }
 }
