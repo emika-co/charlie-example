@@ -32,9 +32,8 @@
       </div>
       <div class="row mb-3">
         <div class="col-12">
-          <div>
-            {{ item.description }}
-          </div>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <div id="description" v-html="sanitizeHTML(item.description)" />
         </div>
       </div>
       <div class="row mb-3">
@@ -173,6 +172,9 @@ export default {
         )
       }
       this.$store.dispatch('loading', false)
+    },
+    sanitizeHTML (html) {
+      return this.$sanitize(this.item.description)
     }
   }
 }

@@ -36,7 +36,8 @@ export default {
     '~/plugins/cookie',
     '~/plugins/nuxt-client-init',
     '~/plugins/alert',
-    '~/plugins/uuid'
+    '~/plugins/uuid',
+    '~/plugins/sanitize-html'
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
