@@ -1,6 +1,7 @@
 const admin = require('firebase-admin');
 admin.initializeApp();
 const sellers = require('./sellers');
+const items = require('./items');
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
@@ -12,3 +13,4 @@ const sellers = require('./sellers');
 
 exports.createSellers = sellers.createSellers;
 exports.createItem = sellers.createItem;
+exports.showItem = items.showItem;

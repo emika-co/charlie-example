@@ -8,19 +8,23 @@
       :cover-img="item.covers[0]"
       :download-link="item.files[0]"
     />
+    <pagination class="mb-3" />
   </div>
 </template>
 
 <script>
 import item from '../../components/user/history/UserItem.vue'
+import Pagination from '../../components/Pagination.vue'
 import { firestore } from '~/plugins/firebase'
 export default {
-  components: { item },
+  components: { item, Pagination },
   middleware: ['auth'],
   layout: 'app',
   data () {
     return {
-      items: []
+      items: [],
+      totalItem: 0,
+      limit: 25
     }
   },
   computed: {
@@ -29,7 +33,6 @@ export default {
     }
   },
   async created () {
-    this.$store.dispatch('setPageTitle', 'สินค้าของฉัน')
     this.$store.dispatch('loading', true)
     await this.getItems()
     this.$store.dispatch('loading', false)
@@ -37,13 +40,17 @@ export default {
   methods: {
     async getItems () {
       if (this.user.uid) {
-        const itemRef = firestore.collection('inventories').where('uid', '==', this.user.uid).orderBy('createdAt', 'desc').limit(25)
+        const limit = this.limit
+        const itemRef = firestore.collection('inventories').where('uid', '==', this.user.uid).orderBy('createdAt', 'desc')
         const snapshot = await itemRef.get()
-        snapshot.forEach((doc) => {
-          const i = doc.data()
-          i.id = doc.id
+        this.totalItem = snapshot.size
+        let index = 0
+        while (index < limit && index < snapshot.size) {
+          const i = snapshot.docs[index].data()
+          i.id = snapshot.docs[index].id
           this.items.push(i)
-        })
+          index++
+        }
       }
     }
   }

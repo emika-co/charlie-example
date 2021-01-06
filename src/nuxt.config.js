@@ -36,7 +36,8 @@ export default {
     '~/plugins/cookie',
     '~/plugins/nuxt-client-init',
     '~/plugins/alert',
-    '~/plugins/uuid'
+    '~/plugins/uuid',
+    '~/plugins/sanitize-html'
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -55,7 +56,9 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    'nuxt-clipboard2',
+    '@nuxtjs/toast'
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
