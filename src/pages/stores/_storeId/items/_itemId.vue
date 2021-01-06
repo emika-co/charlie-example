@@ -2,19 +2,19 @@
   <div class="container">
     <div class="align-self w-100">
       <div class="row my-2">
-        <div class="col-8">
+        <div class="col">
           <span>
             {{ item.name }}
           </span>
         </div>
-        <div class="col-4 my-auto text-right">
-          <button id="add-to-cart" class="btn btn-primary">
-            <div class="w-fit-content mx-auto">
-              <span class="material-icons mr-2 float-left">
-                add_shopping_cart
-              </span>
+        <div class="col ml-auto my-auto text-right">
+          <button id="add-to-cart" class="btn btn-primary w-fit-content">
+            <span class="material-icons mr-2 float-left">
+              add_shopping_cart
+            </span>
+            <span class="float-right">
               {{ item.cost }}฿
-            </div>
+            </span>
           </button>
         </div>
       </div>
@@ -193,9 +193,5 @@ export default {
 }
 .text-muted {
   font-size: 0.7rem;
-}
-#add-to-cart {
-  width: 95px;
-  margin-left: -15px;
 }
 </style>
