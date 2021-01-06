@@ -4,7 +4,7 @@
       <div class="row my-2">
         <div class="col-8">
           <span>
-            ชีทสรุปเคมี ม.4-6 รวมทุกเนื้อหา โดยอาจารย์กบ พ่อทุกสถาบัน
+            {{ item.name }}
           </span>
         </div>
         <div class="col-4 my-auto text-right">
@@ -13,39 +13,28 @@
               <span class="material-icons mr-2 float-left">
                 add_shopping_cart
               </span>
-              360฿
+              {{ item.cost }}฿
             </div>
           </button>
         </div>
       </div>
       <div class="row mb-3">
         <div class="w-100">
-          <img class="w-100" src="/cat.jpg">
+          <img class="w-100 img-fluid rounded" :src="item.covers[0]">
         </div>
       </div>
       <div class="row mb-3">
         <div class="col-12">
           <b>
-            ชีทสรุปเคมี ม.4-6 รวมทุกเนื้อหา โดยอาจารย์กบ พ่อทุกสถาบัน
+            {{ item.name }}
           </b>
         </div>
       </div>
       <div class="row mb-3">
         <div class="col-12">
-          <p>
-            #ชีทสรุปคุณภาพ Best.shortnote <br>
-            ชีทสรุปอ่านง่าย เข้าใจไว อธิบายละเอียด <br>
-            เจาะลึกทุกเนื้อหาตรงตามที่เรียน <br>
-            เน้นตรงข้อสอบ สีสันสดชัด ช่วยกระตุ้นการจดจำ<br>
-            และการ์ตูนน่ารักๆมากมายที่ <br>
-            ช่วยดึงความสนใจให้รู้สึกอยากอ่าน อ่านเพลิน ไม่น่าเบื่อ 📚🥰🌟 <br>
-            ✅ เนื้อหาสรุปอิงจากหลักสูตรแกนกลางการศึกษาขั้นพื้นฐาน <br>
-            ✅ ใช้กระดาษอาร์ตมัน กันน้ำ 100% <br>
-            ✅ ใส่สันเกลียวห่วงช่วยให้เปิดอ่านง่าย <br>
-            #รีวิวเยอะกว่า 4,000 รีวิว <br>
-            #อ่านแล้วผลการเรียนและเกรดดีขึ้นจริง <br>
-            #สอบติดโรงเรียนในฝัน <br>
-          </p>
+          <div>
+            {{ item.description }}
+          </div>
         </div>
       </div>
       <div class="row mb-3">
@@ -58,7 +47,7 @@
                 </div>
                 <div class="col-8 text-right">
                   <span>
-                    <b>360</b> ฿
+                    <b>{{ item.cost }}</b> ฿
                   </span>
                   <p class="text-muted">
                     ราคาที่แสดงรวมภาษีมูลค่าเพิ่มแล้ว
@@ -119,7 +108,7 @@
                   <span class="material-icons mr-2 float-left">
                     shopping_cart
                   </span>
-                  219 ขายแล้ว
+                  {{ item.sold }} ขายแล้ว
                 </div>
               </div>
             </div>
@@ -129,7 +118,7 @@
       <div class="row pb-3">
         <div class="col-12 text-center">
           <p class="mb-0">
-            © สงวนลิขสิทธิ์ โดย, อาจารย์กบ
+            © สงวนลิขสิทธิ์ โดย, {{ item.storeName }}
           </p>
           <a href="#">
             ติดต่อทีมงาน เพื่อขอความช่วยเหลือ
@@ -141,19 +130,57 @@
 </template>
 
 <script>
+import { functions } from '~/plugins/firebase'
 export default {
-  // middleware: ['auth']
+  layout: 'public',
+  data () {
+    return {
+      item: {
+        id: '',
+        name: '',
+        cost: 0,
+        covers: [],
+        description: '',
+        storeName: '',
+        sold: 0,
+        tags: [],
+        createdAt: '',
+        updatedAt: ''
+      }
+    }
+  },
+  async created () {
+    await this.getItem()
+  },
+  methods: {
+    async getItem () {
+      this.$store.dispatch('loading', true)
+      const showItem = functions.httpsCallable('showItem')
+      try {
+        const result = await showItem({
+          itemId: this.$route.params.itemId
+        })
+        if (result.data) {
+          this.item = result.data
+        } else {
+          this.$router.push('/_')
+        }
+      } catch (error) {
+        this.$swal.fire(
+          'เกิดข้อผิดพลาด',
+          error.message,
+          'error'
+        )
+      }
+      this.$store.dispatch('loading', false)
+    }
+  }
 }
 </script>
 
 <style scoped>
 .container {
   height: 100vh;
-}
-img {
-  max-width: 100%;
-  max-height: 100%;
-  border-radius: 0px 0px 20px 20px;
 }
 .green-checker {
   filter: invert(48%) sepia(90%) saturate(2800%) hue-rotate(86deg)

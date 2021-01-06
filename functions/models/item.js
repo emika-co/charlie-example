@@ -74,12 +74,39 @@ var Item = (() => {
         files: item.files,
         tags: item.tags,
         storeName: item.storeName,
+        sold: 0,
         createdAt: new Date(),
         updatedAt: new Date()
       });
       itemDocRef.id = item.id;
       return itemDocRef;
     } catch (error) {
+      throw error;
+    }
+  });
+
+  Item.prototype.public = (async () => {
+    try {
+      const itemDocRef = await db.collection('items').doc(item.id)
+      const doc = await itemDocRef.get()
+      if (doc.exists) {
+        const i = doc.data()
+        return {
+          id: item.id,
+          name: i.name,
+          description: i.description,
+          cost: i.cost,
+          covers: i.covers,
+          tags: i.tags,
+          storeName: i.storeName,
+          sold: i.sold,
+          createdAt: i.createdAt,
+          updatedAt: i.updatedAt
+        }
+      }
+      return null
+    } catch (error) {
+      console.log(error);
       throw error;
     }
   });
