@@ -54,7 +54,6 @@ export default {
     },
     async copyURL (itemId) {
       try {
-        // console.log(this.$toast)
         if (this.store.id) {
           const url = `${window.location.origin}/stores/${this.store.id}/items/${itemId}`
           await this.$copyText(url)
