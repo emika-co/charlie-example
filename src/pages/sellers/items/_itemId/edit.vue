@@ -79,12 +79,20 @@
               aria-describedby="file"
               @change="uploadSecret()"
             >
-            <div class="w-100" @click="selectFile()">
-              <div class="float-left text-truncate col-8">
+            <div class="col-12">
+              <div class="text-truncate">
                 {{ item.file.name }}
               </div>
               <div class="float-right">
-                Choose File
+                <span v-if="item.file.url">
+                  <a :href="item.file.url" target="_blank">
+                    ดาวโหลดไฟล์
+                  </a>
+                </span>
+                <span>|</span>
+                <span class="app-link" @click="selectFile()">
+                  เลือกไฟล์
+                </span>
               </div>
             </div>
           </div>
@@ -93,7 +101,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12">
-        <button class="btn btn-primary w-100" @click="createItem()">
+        <button class="btn btn-primary w-100" @click="updateItem()">
           <div class="w-fit-content mx-auto">
             ดำเนินการต่อ
           </div>
@@ -104,7 +112,7 @@
 </template>
 
 <script>
-import { storage, functions } from '~/plugins/firebase'
+import { storage, functions, firestore } from '~/plugins/firebase'
 export default {
   layout: 'view',
   middleware: ['auth', 'seller'],
@@ -143,6 +151,9 @@ export default {
       return this.$store.getters['user/getUser']
     }
   },
+  async created () {
+    await this.getItem()
+  },
   methods: {
     selectCover () {
       this.$refs.cover.click()
@@ -153,9 +164,6 @@ export default {
     coverImgHandler () {
       this.itemValidator.cover = false
       const cover = this.$refs.cover.files[0]
-      if (!cover) {
-        return
-      }
       if (cover.type !== 'image/jpeg' && cover.type !== 'image/png') {
         this.itemValidator.cover = true
         this.item.cover.description = 'กรุณาใช้ไฟล์นามสกุล jpg/jpeg หรือ png เท่านั้น'
@@ -361,12 +369,13 @@ export default {
       }
       return false
     },
-    async createItem () {
+    // edit
+    async updateItem () {
       if (!this.isItemValid()) {
         return
       }
       this.$store.dispatch('loading', true)
-      const createItem = functions.httpsCallable('createItem')
+      const updateItem = functions.httpsCallable('updateItem')
       try {
         const data = {
           id: this.item.id,
@@ -377,7 +386,7 @@ export default {
           files: [this.item.file.url],
           tags: this.item.tags
         }
-        await createItem(data)
+        await updateItem(data)
         this.$swal.fire(
           'บันทึกข้อมูลสำเร็จ',
           '',
@@ -395,6 +404,28 @@ export default {
         )
       }
       this.$store.dispatch('loading', false)
+    },
+    async getItem () {
+      const itemRef = firestore.collection('items').doc(this.$route.params.itemId)
+      try {
+        const snapshot = await itemRef.get()
+        if (snapshot.exists) {
+          const i = snapshot.data()
+          this.item.id = snapshot.id
+          this.item.name = i.name
+          this.item.cost = i.cost
+          this.item.cover.name = i.covers[0]
+          this.item.cover.url = i.covers[0]
+          this.item.description = i.description
+          this.item.file.name = i.files[0]
+          this.item.file.url = i.files[0]
+          this.item.tags = i.tags
+        } else {
+          this.$router.push('/_')
+        }
+      } catch (error) {
+        this.$router.push('/_')
+      }
     }
   }
 }

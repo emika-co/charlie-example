@@ -43,28 +43,4 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  height: 100vh;
-}
-img {
-  max-width: 100%;
-  max-height: 100%;
-  border-radius: 0px 0px 20px 20px;
-}
-.green-checker {
-  filter: invert(48%) sepia(90%) saturate(2800%) hue-rotate(86deg)
-    brightness(90%) contrast(119%);
-  width: 30px;
-  margin-top: -2px;
-}
-.w-fit-content {
-  width: fit-content;
-}
-.text-muted {
-  font-size: 0.7rem;
-}
-#add-to-cart {
-  width: 95px;
-  margin-left: -15px;
-}
 </style>

@@ -12,5 +12,6 @@ const items = require('./items');
 // });
 
 exports.createSellers = sellers.createSellers;
-exports.createItem = sellers.createItem;
+exports.createItem = items.createItem;
 exports.showItem = items.showItem;
+exports.updateItem = items.updateItem;

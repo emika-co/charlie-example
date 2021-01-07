@@ -156,3 +156,11 @@ input[type="color"]:focus,
 .sub-text {
   font-size: 0.7rem;
 }
+
+.disabled {
+  opacity: 0.7;
+}
+
+.w-fit-content {
+  width: fit-content;
+}

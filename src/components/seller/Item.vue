@@ -14,9 +14,9 @@
         {{ cost }} บาท
       </span>
       <span class="float-right">
-        <a href="#">
+        <span class="app-link" @click="edit()">
           แก้ไข
-        </a>
+        </span>
         |
         <span class="app-link" @click="show()">
           คัดลอกลิ้ง
@@ -49,6 +49,9 @@ export default {
   methods: {
     show () {
       this.$emit('copyURL', this.itemId)
+    },
+    edit () {
+      this.$emit('editItem', this.itemId)
     }
   }
 }

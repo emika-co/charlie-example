@@ -7,7 +7,8 @@ export const state = () => ({
   },
   registerURL: '/sellers/kyc',
   redirectURL: '/sellers',
-  dashboardURL: '/sellers/dashboard'
+  dashboardURL: '/sellers/dashboard',
+  itemURL: '/sellers/items'
 })
 
 export const mutations = {
@@ -35,6 +36,9 @@ export const getters = {
   },
   getDashboardURL (state) {
     return state.dashboardURL
+  },
+  getSellerItemURL (state) {
+    return state.itemURL
   }
 }
 
