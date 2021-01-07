@@ -58,8 +58,9 @@
             รูปสินค้า
           </div>
           <div class="upload-box files text-center mb-3" :class="{ 'upload-box-invalid': itemValidator.cover }" @click="selectCover()">
-            <img src="~/assets/upload-cloud.svg">
-            <p class="text-muted mb-1">
+            <img v-if="!item.cover.url" src="~/assets/upload-cloud.svg">
+            <img v-else :src="item.cover.url" class="img-fluid">
+            <p class="text-muted mb-1 text-truncate">
               {{ item.cover.description }}
             </p>
             <p class="text-muted sub-text">
@@ -152,6 +153,9 @@ export default {
     coverImgHandler () {
       this.itemValidator.cover = false
       const cover = this.$refs.cover.files[0]
+      if (!cover) {
+        return
+      }
       if (cover.type !== 'image/jpeg' && cover.type !== 'image/png') {
         this.itemValidator.cover = true
         this.item.cover.description = 'กรุณาใช้ไฟล์นามสกุล jpg/jpeg หรือ png เท่านั้น'
@@ -188,11 +192,9 @@ export default {
           switch (snapshot.state) {
             case storage.TaskState.PAUSED: // or 'paused'
               // eslint-disable-next-line no-console
-              console.log('Upload is paused')
               break
             case storage.TaskState.RUNNING: // or 'running'
               // eslint-disable-next-line no-console
-              console.log('Upload is running')
               break
           }
         }, (error) => {
@@ -233,6 +235,9 @@ export default {
     uploadSecret () {
       this.itemValidator.file = false
       const file = this.$refs.file.files[0]
+      if (!file) {
+        return
+      }
       if (file.size > 20971520) {
         this.itemValidator.file = true
         this.$swal.fire(
@@ -368,10 +373,9 @@ export default {
           name: this.item.name,
           cost: parseFloat(this.item.cost),
           description: this.item.description,
-          covers: this.item.cover.url,
-          files: this.item.file.url,
-          tags: this.item.tag,
-          storeName: this.store.name
+          covers: [this.item.cover.url],
+          files: [this.item.file.url],
+          tags: this.item.tags
         }
         await createItem(data)
         this.$swal.fire(
@@ -380,8 +384,10 @@ export default {
           'success'
         )
         this.$store.dispatch('loading', false)
-        return this.$router.push(this.$store.getters['seller/getDashboardURL'])
+        return this.$router.push(this.$store.getters['seller/getSellerItemURL'])
       } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error)
         this.$swal.fire(
           'เกิดข้อผิดพลาด',
           error.message,

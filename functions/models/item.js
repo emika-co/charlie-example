@@ -22,22 +22,14 @@ var Item = (() => {
     item.description = data.description;
     item.cost = data.cost;
     item.sid = data.uid;
-    item.storeName = data.storeName;
-    if (data.covers) {
-      item.covers = item.covers.concat(data.covers);
-    }
-    if (data.files) {
-      item.files = item.files.concat(data.files);
-    }
-    if (data.tags) {
-      item.tags = item.tags.concat(data.tags);
-    }
+    item.covers = data.covers;
+    item.files = data.files;
+    item.tags = data.tags;
   }
 
   Item.prototype.validate = (async () => {
     try {
-      console.log(uuidValidate(item.id))
-      if (!item.sid || !item.storeName) {
+      if (!item.sid) {
         return 'กรุณาล็อคอินใหม่';
       } else if (!item.id) {
         return 'กรุณารีเฟรชเพจแล้วทำรายการใหม่';
@@ -47,9 +39,9 @@ var Item = (() => {
         return 'กรุณากรอกรายละเอียด';
       } else if (!item.cost) {
         return 'กรุณากรอกราคาสินค้า';
-      } else if (!item.covers.length) {
+      } else if (!item.covers.length || !Array.isArray(item.covers)) {
         return 'กรุณาอัพโหลดรูปสินค้า';
-      } else if (!item.files.length) {
+      } else if (!item.files.length || !Array.isArray(item.files)) {
         return 'กรุณาอัพโหลดไฟล์';
       } else if (!uuidValidate(item.id)) {
         return 'Invalid ID';
@@ -57,7 +49,17 @@ var Item = (() => {
       // check type
       if (typeof item.cost !== 'number') {
         return 'ราคาสินค้าต้องเป็นตัวเลขเท่านั้น';
+      } else if (item.cost.toString().match(/[-+][0-9]+\.[0-9]+$/)) {
+        return 'ราคาสินค้าไม่ถูกต้อง';
       }
+      // check sellers
+      const sellersDocRef = await db.collection('sellers').doc(item.sid);
+      const snapshot = await sellersDocRef.get();
+      if (!snapshot.exists) {
+        throw 'ไม่พบร้านค้า';
+      }
+      const seller = snapshot.data();
+      item.storeName = seller.storeName;
     } catch (error) {
       throw error;
     }
@@ -87,10 +89,10 @@ var Item = (() => {
 
   Item.prototype.public = (async () => {
     try {
-      const itemDocRef = await db.collection('items').doc(item.id)
-      const doc = await itemDocRef.get()
+      const itemDocRef = await db.collection('items').doc(item.id);
+      const doc = await itemDocRef.get();
       if (doc.exists) {
-        const i = doc.data()
+        const i = doc.data();
         return {
           id: item.id,
           name: i.name,
@@ -104,11 +106,37 @@ var Item = (() => {
           updatedAt: i.updatedAt
         }
       }
-      return null
+      return null;
     } catch (error) {
       console.log(error);
       throw error;
     }
+  });
+
+  Item.prototype.update = ((data) => {
+    const itemDocRef = db.collection('items').doc(data.id);
+    return db.runTransaction((transaction) => {
+      return transaction.get(itemDocRef).then((doc) => {
+        if (!doc.exists) {
+          throw 'Item does not exists';
+        }
+        transaction.update(itemDocRef, {
+          name: data.name,
+          description: data.description,
+          cost: data.cost,
+          covers: data.covers,
+          files: data.files,
+          tags: data.tags,
+          updatedAt: new Date()
+        });
+      });
+    }).then(() => {
+      // success
+      return null;
+    }).catch((error) => {
+      console.log(error)
+      throw error;
+    });
   });
 
   return Item;

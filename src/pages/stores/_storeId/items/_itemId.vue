@@ -143,8 +143,8 @@ export default {
         storeName: '',
         sold: 0,
         tags: [],
-        createdAt: '',
-        updatedAt: ''
+        createdAt: {},
+        updatedAt: {}
       }
     }
   },

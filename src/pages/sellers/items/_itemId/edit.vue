@@ -58,8 +58,9 @@
             รูปสินค้า
           </div>
           <div class="upload-box files text-center mb-3" :class="{ 'upload-box-invalid': itemValidator.cover }" @click="selectCover()">
-            <img src="~/assets/upload-cloud.svg">
-            <p class="text-muted mb-1">
+            <img v-if="!item.cover.url" src="~/assets/upload-cloud.svg">
+            <img v-else :src="item.cover.url" class="img-fluid">
+            <p class="text-muted mb-1 text-truncate">
               {{ item.cover.description }}
             </p>
             <p class="text-muted sub-text">
@@ -78,12 +79,20 @@
               aria-describedby="file"
               @change="uploadSecret()"
             >
-            <div class="w-100" @click="selectFile()">
-              <div class="float-left text-truncate col-8">
+            <div class="col-12">
+              <div class="text-truncate">
                 {{ item.file.name }}
               </div>
               <div class="float-right">
-                Choose File
+                <span v-if="item.file.url">
+                  <a :href="item.file.url" target="_blank">
+                    ดาวโหลดไฟล์
+                  </a>
+                </span>
+                <span>|</span>
+                <span class="app-link" @click="selectFile()">
+                  เลือกไฟล์
+                </span>
               </div>
             </div>
           </div>
@@ -92,7 +101,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12">
-        <button class="btn btn-primary w-100" @click="createItem()">
+        <button class="btn btn-primary w-100" @click="updateItem()">
           <div class="w-fit-content mx-auto">
             ดำเนินการต่อ
           </div>
@@ -103,7 +112,7 @@
 </template>
 
 <script>
-import { storage, functions } from '~/plugins/firebase'
+import { storage, functions, firestore } from '~/plugins/firebase'
 export default {
   layout: 'view',
   middleware: ['auth', 'seller'],
@@ -141,6 +150,9 @@ export default {
     user () {
       return this.$store.getters['user/getUser']
     }
+  },
+  async created () {
+    await this.getItem()
   },
   methods: {
     selectCover () {
@@ -188,11 +200,9 @@ export default {
           switch (snapshot.state) {
             case storage.TaskState.PAUSED: // or 'paused'
               // eslint-disable-next-line no-console
-              console.log('Upload is paused')
               break
             case storage.TaskState.RUNNING: // or 'running'
               // eslint-disable-next-line no-console
-              console.log('Upload is running')
               break
           }
         }, (error) => {
@@ -233,6 +243,9 @@ export default {
     uploadSecret () {
       this.itemValidator.file = false
       const file = this.$refs.file.files[0]
+      if (!file) {
+        return
+      }
       if (file.size > 20971520) {
         this.itemValidator.file = true
         this.$swal.fire(
@@ -356,32 +369,34 @@ export default {
       }
       return false
     },
-    async createItem () {
+    // edit
+    async updateItem () {
       if (!this.isItemValid()) {
         return
       }
       this.$store.dispatch('loading', true)
-      const createItem = functions.httpsCallable('createItem')
+      const updateItem = functions.httpsCallable('updateItem')
       try {
         const data = {
           id: this.item.id,
           name: this.item.name,
           cost: parseFloat(this.item.cost),
           description: this.item.description,
-          covers: this.item.cover.url,
-          files: this.item.file.url,
-          tags: this.item.tag,
-          storeName: this.store.name
+          covers: [this.item.cover.url],
+          files: [this.item.file.url],
+          tags: this.item.tags
         }
-        await createItem(data)
+        await updateItem(data)
         this.$swal.fire(
           'บันทึกข้อมูลสำเร็จ',
           '',
           'success'
         )
         this.$store.dispatch('loading', false)
-        return this.$router.push(this.$store.getters['seller/getDashboardURL'])
+        return this.$router.push(this.$store.getters['seller/getSellerItemURL'])
       } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error)
         this.$swal.fire(
           'เกิดข้อผิดพลาด',
           error.message,
@@ -389,6 +404,28 @@ export default {
         )
       }
       this.$store.dispatch('loading', false)
+    },
+    async getItem () {
+      const itemRef = firestore.collection('items').doc(this.$route.params.itemId)
+      try {
+        const snapshot = await itemRef.get()
+        if (snapshot.exists) {
+          const i = snapshot.data()
+          this.item.id = snapshot.id
+          this.item.name = i.name
+          this.item.cost = i.cost
+          this.item.cover.name = i.covers[0]
+          this.item.cover.url = i.covers[0]
+          this.item.description = i.description
+          this.item.file.name = i.files[0]
+          this.item.file.url = i.files[0]
+          this.item.tags = i.tags
+        } else {
+          this.$router.push('/_')
+        }
+      } catch (error) {
+        this.$router.push('/_')
+      }
     }
   }
 }

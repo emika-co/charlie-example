@@ -8,6 +8,7 @@
       :cost="item.cost"
       :cover-img="item.covers[0]"
       @copyURL="copyURL"
+      @editItem="editItem"
     />
     <div class="row">
       <nuxt-link to="/sellers/items/create" class="create-box files text-center w-100 mx-2 mb-3">
@@ -78,6 +79,9 @@ export default {
           'error'
         )
       }
+    },
+    editItem (itemId) {
+      this.$router.push(`/sellers/items/${itemId}/edit`)
     }
   }
 }
