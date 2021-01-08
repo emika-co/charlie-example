@@ -7,14 +7,19 @@
     >
       <span class="navbar-toggler-icon" />
     </button>
-    <nuxt-link to="/" class="navbar-brand mx-auto">
-      <img src="~/assets/logo.svg" alt="logo">
-    </nuxt-link>
+    <span class="ml-auto">
+      {{ pageTitle }}
+    </span>
   </nav>
 </template>
 
 <script>
 export default {
+  computed: {
+    pageTitle () {
+      return this.$store.getters.getPageTitle
+    }
+  },
   methods: {
     sidebarToggle () {
       document.getElementById('wrapper').classList.toggle('toggled')

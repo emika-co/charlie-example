@@ -14,7 +14,10 @@ export default {
       { hid: 'description', name: 'description', content: '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Kanit:wght@100;300;500&display=swap' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' }
     ],
     script: [
       { src: 'https://code.jquery.com/jquery-3.5.1.slim.min.js', crossorigin: 'anonymous' },
@@ -30,7 +33,11 @@ export default {
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
     '~/plugins/firebase',
-    '~/plugins/cookie'
+    '~/plugins/cookie',
+    '~/plugins/nuxt-client-init',
+    '~/plugins/alert',
+    '~/plugins/uuid',
+    '~/plugins/sanitize-html'
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -49,7 +56,9 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    'nuxt-clipboard2',
+    '@nuxtjs/toast'
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
@@ -60,6 +69,7 @@ export default {
   },
 
   env: {
+    environment: process.env.ENV || 'production',
     firebaseConfig: {
       apiKey: process.env.FIREBASE_API_KEY || 'AIzaSyAaYpCEJprT5eecDkrdjlMX6Sma3ANCZVU',
       authDomain: process.env.FIREBASE_AUTH_DOMAIN || 'charlie-296709.firebaseapp.com',

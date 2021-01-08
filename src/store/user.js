@@ -36,11 +36,17 @@ export const getters = {
   },
   getAuthRedirectURL (state) {
     return state.authRedirectURL
+  },
+  isAuthenticated (state) {
+    if (state.user.uid) {
+      return true
+    }
+    return false
   }
 }
 
 export const actions = {
-  async onAuth ({ commit, getters }) {
+  async onAuth ({ commit }) {
     try {
       const result = await auth().getRedirectResult()
       const user = {
@@ -62,7 +68,6 @@ export const actions = {
       }
       if (user.uid) {
         commit('setUser', user)
-        this.app.router.push(getters.getAuthRedirectURL)
       }
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -95,6 +100,7 @@ export const actions = {
   async signOut ({ commit }) {
     try {
       this.$cookies.remove('auth')
+      this.$cookies.remove('store')
       commit('setUser', null)
       await auth().signOut()
       this.app.router.push('/')

@@ -1,9 +1,16 @@
 body {
   background-color: #F8F9FA;
+  font-family: 'Kanit', sans-serif;
+  color: #324C5B;
+  font-weight: 300;
 }
 
-.bg-light {
-  background-color: #ffffff !important;
+a {
+  color: #539AEE;
+}
+
+.bg-white {
+  background-color: #FFFFFF;
 }
 
 .navbar-light .navbar-toggler {
@@ -30,4 +37,130 @@ body {
 .btn-login.btn-google {
   background-color: #ffffff;
   color: #324C5B;
+}
+
+#wrapper {
+  overflow-x: hidden;
+}
+
+#sidebar-wrapper {
+  min-height: 100vh;
+  margin-left: -17rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  -webkit-transition: margin .25s ease-out;
+  -moz-transition: margin .25s ease-out;
+  -o-transition: margin .25s ease-out;
+  transition: margin .25s ease-out;
+}
+
+#sidebar-wrapper .sidebar-heading {
+  padding: 1rem 1.25rem;
+  font-size: 1.2rem;
+}
+
+#sidebar-wrapper .list-group {
+  width: 14rem;
+}
+
+.list-item {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#page-content-wrapper {
+  min-width: 100vw;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+  margin-left: 0;
+}
+
+@media (min-width: 768px) {
+  #sidebar-wrapper {
+    margin-left: 0;
+  }
+
+  #page-content-wrapper {
+    min-width: 0;
+    width: 100%;
+  }
+
+  #wrapper.toggled #sidebar-wrapper {
+    margin-left: -14rem;
+  }
+}
+
+.btn {
+  border: none;
+}
+
+.btn-primary {
+  background-color: #539AEE;
+}
+
+.form-control {
+  font-weight: 300;
+}
+
+.field-invalid {
+  transition-duration: 0.3s;
+  border-bottom: 1px solid #ff7070 !important;
+}
+
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+.uneditable-input:focus {
+  border-color: none;
+  box-shadow: none;
+  outline: 0 none;
+}
+
+.input-group-text {
+  background-color: #fff;
+  border: none;
+  font-weight: 300;
+}
+.form-control {
+  border: none;
+  border-radius: 0;
+}
+.input-group {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.app-link {
+  color: #539AEE;
+  text-decoration: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+.app-link:hover {
+  opacity: 0.7;
+  transition-duration: 0.3s;
+}
+
+.sub-text {
+  font-size: 0.7rem;
+}
+
+.disabled {
+  opacity: 0.7;
+}
+
+.w-fit-content {
+  width: fit-content;
 }
