@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <div class="row my-2">
-      <div class="col my-auto pl-0">
+      <div class="col my-auto">
         {{ item.name }}
       </div>
-      <div class="col ml-auto text-right pr-0">
+      <div class="col ml-auto text-right">
         <button id="add-to-cart" class="btn btn-primary w-fit-content">
           <span class="material-icons mr-2 float-left">
             add_shopping_cart
