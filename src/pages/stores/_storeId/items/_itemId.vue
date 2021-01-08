@@ -5,7 +5,7 @@
         {{ item.name }}
       </div>
       <div class="col ml-auto text-right">
-        <button id="add-to-cart" class="btn btn-primary w-fit-content">
+        <button v-b-modal.basket class="btn btn-primary w-fit-content">
           <span class="material-icons mr-2 float-left">
             add_shopping_cart
           </span>
@@ -13,6 +13,42 @@
             {{ item.cost }}฿
           </span>
         </button>
+        <b-modal id="basket" title="ตะกร้าสินค้า" hide-footer centered>
+          <template #modal-header="{ close }">
+            <h5 class="modal-title">
+              ตะกร้าสินค้า
+            </h5>
+            <span class="app-link" @click="close()">
+              ยกเลิก
+            </span>
+          </template>
+          <div class="row">
+            <div class="col-4">
+              <img class="img-fluid rounded" :src="item.covers[0]">
+            </div>
+            <div class="col-8">
+              <p class="mb-0">
+                {{ item.name }}
+              </p>
+              <p class="text-muted mb-0">
+                {{ item.storeName }}
+              </p>
+              <p class="mb-0">
+                <b>{{ item.cost }}</b> บาท
+              </p>
+            </div>
+          </div>
+          <div v-if="!isAuthenticated">
+            <hr>
+            <p class="text-center">
+              คุณยังไม่ได้เข้าสู่ระบบ
+            </p>
+          </div>
+          <hr>
+          <button class="btn btn-primary w-100">
+            ดำเนินการต่อ
+          </button>
+        </b-modal>
       </div>
     </div>
     <div class="row mb-3">
@@ -82,7 +118,7 @@
               </div>
             </div>
             <div class="w-100">
-              <button class="btn btn-primary w-100">
+              <button v-b-modal.basket class="btn btn-primary w-100">
                 <div class="w-fit-content mx-auto">
                   <span class="material-icons mr-2 float-left">
                     add_shopping_cart
@@ -144,6 +180,11 @@ export default {
       }
     }
   },
+  computed: {
+    isAuthenticated () {
+      return this.$store.getters['user/isAuthenticated']
+    }
+  },
   async created () {
     await this.getItem()
   },
@@ -171,6 +212,9 @@ export default {
     },
     sanitizeHTML (html) {
       return this.$sanitize(this.item.description)
+    },
+    showBasket () {
+      document.getElementById('basket')
     }
   }
 }
