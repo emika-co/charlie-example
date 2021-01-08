@@ -4,7 +4,7 @@
       <img :src="coverImg" class="img-fluid rounded">
     </div>
     <div class="col-8 align-self-center">
-      <p style="margin-block-end: 0em;">
+      <p class="mb-0">
         {{ name }}
       </p>
     </div>
