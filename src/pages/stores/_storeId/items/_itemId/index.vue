@@ -45,7 +45,7 @@
             </p>
           </div>
           <hr>
-          <button class="btn btn-primary w-100">
+          <button class="btn btn-primary w-100" @click="paymentMethod()">
             ดำเนินการต่อ
           </button>
         </b-modal>
@@ -186,7 +186,9 @@ export default {
     }
   },
   async created () {
+    this.$store.dispatch('loading', true)
     await this.getItem()
+    this.$store.dispatch('loading', false)
   },
   methods: {
     async getItem () {
@@ -215,6 +217,15 @@ export default {
     },
     showBasket () {
       document.getElementById('basket')
+    },
+    paymentMethod () {
+      this.$router.push({
+        name: 'stores-storeId-items-itemId-orders-payment-method',
+        params: {
+          storeId: this.$route.params.storeId,
+          itemId: this.$route.params.itemId
+        }
+      })
     }
   }
 }

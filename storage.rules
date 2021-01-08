@@ -17,5 +17,9 @@ service firebase.storage {
     	allow read: if true;
       allow write, create, delete: if request.resource.size < 20 * 1024 * 1024;
     }
+    match /resources/{allPaths=**} {
+    	allow read: if true;
+    	allow write: if false;
+    }
   }
 }
