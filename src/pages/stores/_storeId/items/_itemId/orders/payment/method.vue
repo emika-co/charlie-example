@@ -36,33 +36,23 @@
         </p>
       </div>
     </div>
-    <div class="row mb-3 bg-white py-2">
+    <div class="row mb-3 bg-white pt-2">
       <div class="col mx-2">
-        <payment-method v-for="(method, index) in paymentMethods" :key="index" :name="method.name" :img-cover="method.imgCover" />
+        <payment-method
+          v-for="(method, index) in paymentMethods"
+          :key="index"
+          class="mb-2 payment-method"
+          :name="method.name"
+          :img-cover="method.imgCover"
+          :active="method.id == paymentMethodId"
+          @click.native="paymentMethod(method.id)"
+        />
       </div>
     </div>
-    <!-- <div class="row pt-2 bg-white">
-      <div class="col-12">
-        <button class="btn btn-outline-primary w-100">
-          <div class="w-fit-content mx-auto">
-            โอนผ่านธนาคาร
-          </div>
-        </button>
-      </div>
-      <div class="col-12 pt-10" style="padding-top:10px">
-        <button class="btn btn-outline-primary w-100">
-          <div class="w-fit-content mx-auto">
-            บัตรเดบิต/เครดิต
-          </div>
-        </button>
-      </div>
-    </div> -->
-    <div class="row" style="padding-top:50px">
+    <div class="row">
       <div class="col-12">
         <button class="btn btn-primary w-100 bt-color">
-          <div class="w-fit-content mx-auto">
-            ดำเนินการต่อ
-          </div>
+          ดำเนินการต่อ
         </button>
       </div>
     </div>
@@ -89,16 +79,23 @@ export default {
       },
       paymentMethods: [
         {
+          id: 1,
           name: 'โอนผ่านแอพธนาคาร QR',
           imgCover: 'https://firebasestorage.googleapis.com/v0/b/charlie-296709.appspot.com/o/resources%2Fpayment-methods%2Fpromptpay.svg?alt=media&token=9671ef86-1370-405c-bdf0-cb1ea255dd73'
+        },
+        {
+          id: 2,
+          name: 'บัตรเดบิต/เครดิต',
+          imgCover: 'https://firebasestorage.googleapis.com/v0/b/charlie-296709.appspot.com/o/resources%2Fpayment-methods%2Fpaypal.svg?alt=media&token=1023fb9d-5c3b-4c7a-9026-092ffb7dadc7'
         }
-      ]
+      ],
+      paymentMethodId: ''
     }
   },
   async created () {
     this.$store.dispatch('loading', true)
     await this.getItem()
-    this.$store.dispatch('setPageTitle', 'ยอดรวม 360 บาท')
+    this.$store.dispatch('setPageTitle', `ยอดรวม ${this.item.cost} บาท`)
     this.$store.dispatch('loading', false)
   },
   methods: {
@@ -122,10 +119,17 @@ export default {
         )
       }
       this.$store.dispatch('loading', false)
+    },
+    paymentMethod (pid) {
+      this.paymentMethodId = pid
+      console.log(pid)
     }
   }
 }
 </script>
 
 <style scoped>
+.payment-method {
+  cursor: pointer;
+}
 </style>
