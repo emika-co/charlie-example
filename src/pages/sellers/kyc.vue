@@ -129,7 +129,7 @@
 import { firestore, functions } from '~/plugins/firebase'
 export default {
   layout: 'view',
-  // middleware: ['auth', 'kyc'],
+  middleware: ['auth', 'kyc'],
   data () {
     return {
       banks: [],
