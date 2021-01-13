@@ -51,7 +51,7 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <button class="btn btn-primary w-100 bt-color">
+        <button class="btn btn-primary w-100 bt-color" @click="checkout()">
           ดำเนินการต่อ
         </button>
       </div>
@@ -100,7 +100,6 @@ export default {
   },
   methods: {
     async getItem () {
-      this.$store.dispatch('loading', true)
       const showItem = functions.httpsCallable('showItem')
       try {
         const result = await showItem({
@@ -118,11 +117,12 @@ export default {
           'error'
         )
       }
-      this.$store.dispatch('loading', false)
     },
     paymentMethod (pid) {
       this.paymentMethodId = pid
-      console.log(pid)
+    },
+    checkout () {
+      this.$router.push('../success')
     }
   }
 }
