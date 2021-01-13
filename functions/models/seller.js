@@ -109,7 +109,9 @@ var Seller = (() => {
         bankAccount: seller.bankAccount,
         uid: seller.uid,
         valid: false,
-        dashboard: seller.dashboard
+        dashboard: seller.dashboard,
+        createdAt: new Date(),
+        updatedAt: new Date()
       });
       sellersDocRef.id = seller.uid;
       return sellersDocRef;

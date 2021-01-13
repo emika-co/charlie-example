@@ -2,11 +2,16 @@ const functions = require('firebase-functions');
 const Item = require('./models/item');
 
 exports.getItem = functions.https.onCall(async (data, context) => {
-  const item = Item.get({
-    itemId: data.itemId,
-    uid: context.auth.uid
-  });
-  return item;
+  try {
+    const item = await Item.get({
+      itemId: data.itemId,
+      uid: context.auth.uid
+    });
+    return item;
+  } catch (error) {
+    console.log(error);
+    throw new functions.https.HttpsError('internal', 'Internal Server Error');
+  }
 });
 
 exports.createItem = functions.https.onCall(async (data, context) => {
@@ -62,4 +67,7 @@ exports.updateItem = functions.https.onCall(async (data, context) => {
   } catch (error) {
     throw new functions.https.HttpsError('internal', 'Internal Server Error');
   }
+});
+
+exports.buyItem = functions.https.onCall(async (data, context) => {
 });
