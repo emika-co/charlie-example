@@ -1,6 +1,14 @@
 const functions = require('firebase-functions');
 const Item = require('./models/item');
 
+exports.getItem = functions.https.onCall(async (data, context) => {
+  const item = Item.get({
+    itemId: data.itemId,
+    uid: context.auth.uid
+  });
+  return item;
+});
+
 exports.createItem = functions.https.onCall(async (data, context) => {
   data.uid = context.auth.uid;
   const i = new Item(data);

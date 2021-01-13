@@ -65,6 +65,25 @@ var Item = (() => {
     }
   });
 
+  Item.get = (async (data) => {
+    try {
+      const itemRef = db.collection('inventories')
+                        .where('uid', '==', data.uid)
+                        .where('itemId', '==', data.itemId);
+      const snapshot = await itemRef.get();
+      let item = {};
+      if (snapshot.size) {
+        snapshot.forEach((doc) => {
+          item = doc.data();
+          item.id = doc.id;
+        });
+      }
+      return item
+    } catch (error) {
+      throw error;
+    }
+  });
+
   Item.prototype.create = (async () => {
     try {
       const itemDocRef = await db.collection('items').doc(item.id).set({
