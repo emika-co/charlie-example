@@ -10,8 +10,12 @@
     </div>
     <hr>
     <div class="list-group list-group-flush">
-      <a href="#" class="list-item">ดาวน์โหลด</a>
-      <a href="#" class="list-item" @click="signOut()">ออกจากระบบ</a>
+      <nuxt-link to="/users/history" class="list-item">
+        กลับไปหน้าผู้ซื้อ
+      </nuxt-link>
+      <div class="app-link list-item" @click="signOut()">
+        ออกจากระบบ
+      </div>
     </div>
   </div>
 </template>
