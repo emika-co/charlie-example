@@ -109,7 +109,7 @@
                   กรุณาเลือกธนาคาร
                 </option>
                 <option v-for="(bank, index) in banks" :key="index" :value="bank.id">
-                  {{ bank.bankName }}
+                  {{ bank.bankNameTH }}
                 </option>
               </select>
             </div>

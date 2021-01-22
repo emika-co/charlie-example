@@ -220,7 +220,7 @@ export default {
     },
     paymentMethod () {
       this.$router.push({
-        name: 'stores-storeId-items-itemId-orders-payment-method',
+        name: 'stores-storeId-items-itemId-payment-method',
         params: {
           storeId: this.$route.params.storeId,
           itemId: this.$route.params.itemId

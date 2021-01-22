@@ -98,6 +98,14 @@ a {
 .btn-primary {
   background-color: #539AEE;
 }
+.btn-outline-primary {
+  border: 1px solid #539AEE;
+  color: #539AEE;
+}
+.btn-outline-primary:hover {
+  background-color: #539AEE;
+  border: 1px solid #539AEE;
+}
 
 .form-control {
   font-weight: 300;
