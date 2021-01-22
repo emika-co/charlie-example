@@ -44,7 +44,7 @@ let Payment = class {
       switch (payment.name) {
         case 'ThaiQR':
           try {
-            const t = await thaiqr.createInstance('3e7db17d-3e4f-44a1-b895-9bbfb2d11fac');
+            const t = await thaiqr.createInstance();
             const response = await t.createQRCode(order);
             const responseData = response.data
             const result = {
