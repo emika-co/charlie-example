@@ -17,11 +17,19 @@ service cloud.firestore {
       allow write: if false;
     }
     match /orders/{order} {
-      allow read, write: if false;
+      allow read: if request.auth != null && request.auth.uid == resource.data.uid;
+      allow write: if false;
     }
     match /payments/{payment} {
       allow read: if true;
       allow write: if false;
+    }
+    match /thaiQR/{thaiQR} {
+      allow read: if request.auth != null && request.auth.uid == resource.data.uid;
+      allow write: if false;
+    }
+    match /paymentConfirms/{paymentConfirm} {
+      allow read, write: if false;
     }
   }
 }
