@@ -16,7 +16,6 @@ exports.createSellers = functions.https.onCall(async (data, context) => {
       _id: docRef.id
     }
   } catch (error) {
-    console.log(error);
     throw new functions.https.HttpsError('internal', 'Internal Server Error');
   }
 });

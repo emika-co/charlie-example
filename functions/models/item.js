@@ -1,3 +1,4 @@
+const { firestore } = require('firebase-admin');
 const admin = require('firebase-admin');
 const db = admin.firestore();
 const { validate } = require('uuid');
@@ -12,7 +13,8 @@ var item = {
   sid: '',
   files: [],
   tags: [],
-  storeName: ''
+  storeName: '',
+  sold: 0
 };
 
 var Item = (() => {
@@ -21,11 +23,41 @@ var Item = (() => {
     item.name = data.name;
     item.description = data.description;
     item.cost = data.cost;
-    item.sid = data.uid;
     item.covers = data.covers;
+    item.sid = data.sid;
     item.files = data.files;
     item.tags = data.tags;
+    item.storeName = data.storeName;
   }
+
+  // get functions
+  Item.prototype.id = (() => {
+    return item.id;
+  });
+  Item.prototype.name = (() => {
+    return item.name;
+  });
+  Item.prototype.description = (() => {
+    return item.description;
+  });
+  Item.prototype.cost = (() => {
+    return item.cost;
+  });
+  Item.prototype.covers = (() => {
+    return item.covers;
+  });
+  Item.prototype.sid = (() => {
+    return item.sid;
+  });
+  Item.prototype.files = (() => {
+    return item.files;
+  });
+  Item.prototype.tags = (() => {
+    return item.tags;
+  });
+  Item.prototype.storeName = (() => {
+    return item.storeName;
+  });
 
   Item.prototype.validate = (async () => {
     try {
@@ -53,7 +85,7 @@ var Item = (() => {
         return 'ราคาสินค้าไม่ถูกต้อง';
       }
       // check sellers
-      const sellersDocRef = await db.collection('sellers').doc(item.sid);
+      const sellersDocRef = db.collection('sellers').doc(item.sid);
       const snapshot = await sellersDocRef.get();
       if (!snapshot.exists) {
         throw 'ไม่พบร้านค้า';
@@ -64,26 +96,6 @@ var Item = (() => {
       throw error;
     }
   });
-
-  Item.get = (async (data) => {
-    try {
-      const itemRef = db.collection('inventories')
-                        .where('uid', '==', data.uid)
-                        .where('itemId', '==', data.itemId);
-      const snapshot = await itemRef.get();
-      let item = {};
-      if (snapshot.size) {
-        snapshot.forEach((doc) => {
-          item = doc.data();
-          item.id = doc.id;
-        });
-      }
-      return item
-    } catch (error) {
-      throw error;
-    }
-  });
-
   Item.prototype.create = (async () => {
     try {
       const itemDocRef = await db.collection('items').doc(item.id).set({
@@ -95,7 +107,7 @@ var Item = (() => {
         files: item.files,
         tags: item.tags,
         storeName: item.storeName,
-        sold: 0,
+        sold: item.sold,
         createdAt: new Date(),
         updatedAt: new Date()
       });
@@ -106,34 +118,26 @@ var Item = (() => {
     }
   });
 
-  Item.prototype.public = (async () => {
-    try {
-      const itemDocRef = await db.collection('items').doc(item.id);
-      const doc = await itemDocRef.get();
-      if (doc.exists) {
-        const i = doc.data();
-        return {
-          id: item.id,
-          name: i.name,
-          description: i.description,
-          cost: i.cost,
-          covers: i.covers,
-          tags: i.tags,
-          storeName: i.storeName,
-          sold: i.sold,
-          createdAt: i.createdAt,
-          updatedAt: i.updatedAt
-        }
+  Item.prototype.public = (() => {
+    if (item.id) {
+      return {
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        cost: item.cost,
+        covers: item.covers,
+        tags: item.tags,
+        storeName: item.storeName,
+        sold: item.sold,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt
       }
-      return null;
-    } catch (error) {
-      console.log(error);
-      throw error;
     }
+    return null;
   });
 
   Item.prototype.update = ((data) => {
-    const itemDocRef = db.collection('items').doc(data.id);
+    const itemDocRef = db.collection('items').doc(item.id);
     return db.runTransaction((transaction) => {
       return transaction.get(itemDocRef).then((doc) => {
         if (!doc.exists) {
@@ -153,9 +157,47 @@ var Item = (() => {
       // success
       return null;
     }).catch((error) => {
-      console.log(error)
+      console.log(error);
       throw error;
     });
+  });
+
+  Item.prototype.sold = (async (transaction) => {
+    try {
+      const itemDocRef = db.collection('items').doc(item.id);
+      const increaseBy = firestore.FieldValue.increment(1);
+      return await transaction.update(itemDocRef, {
+        sold: increaseBy
+      });
+    } catch (error) {
+      throw error;
+    }
+  });
+
+  Item.find = (async (itemId) => {
+    try {
+      const itemRef = db.collection('items').doc(itemId);
+      const snapshot = await itemRef.get();
+      if (snapshot.exists) {
+        const result = snapshot.data();
+        return new Item({
+          id: snapshot.id,
+          name: result.name,
+          description: result.description,
+          cost: result.cost,
+          covers: result.covers,
+          sid: result.sid,
+          files: result.files,
+          tags: result.tags,
+          storeName: result.storeName,
+          sold: result.sold
+        });
+      }
+      return null;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   });
 
   return Item;

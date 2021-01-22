@@ -1,21 +1,27 @@
 const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+const db = admin.firestore();
 const Item = require('./models/item');
+const Inventory = require('./models/inventory');
+const Order = require('./models/order');
+const Payment = require('./models/payment');
 
+// get item from inventory
 exports.getItem = functions.https.onCall(async (data, context) => {
   try {
-    const item = await Item.get({
+    const item = await Inventory.get({
       itemId: data.itemId,
       uid: context.auth.uid
     });
     return item;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw new functions.https.HttpsError('internal', 'Internal Server Error');
   }
 });
 
 exports.createItem = functions.https.onCall(async (data, context) => {
-  data.uid = context.auth.uid;
+  data.sid = context.auth.uid;
   const i = new Item(data);
   // validate
   const invalid = await i.validate();
@@ -29,19 +35,21 @@ exports.createItem = functions.https.onCall(async (data, context) => {
       _id: docRef.id
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw new functions.https.HttpsError('internal', 'Internal Server Error');
   }
 });
 
+// show item public
 exports.showItem = functions.https.onCall(async (data, _) => {
-  const i = new Item({
-    id: data.itemId
-  });
   try {
-    const data = await i.public();
-    return data;
+    const item = await Item.find(data.itemId);
+    if (item) {
+      return item.public();
+    }
+    return null;
   } catch (error) {
+    console.error(error);
     throw new functions.https.HttpsError('internal', 'Internal Server Error');
   }
 });
@@ -56,7 +64,6 @@ exports.updateItem = functions.https.onCall(async (data, context) => {
   }
   try {
     return await i.update({
-      id: data.id,
       name: data.name,
       description: data.description,
       cost: data.cost,
@@ -65,9 +72,92 @@ exports.updateItem = functions.https.onCall(async (data, context) => {
       tags: data.tags
     });
   } catch (error) {
+    console.error(error);
     throw new functions.https.HttpsError('internal', 'Internal Server Error');
   }
 });
 
 exports.buyItem = functions.https.onCall(async (data, context) => {
+  try {
+    const payment = await Payment.find(data.paymentId);
+    if (!payment.exists) {
+      throw new functions.https.HttpsError('not-found', 'โปรดระบุวิธีการชำระเงิน');
+    }
+    const item = await Item.find(data.itemId);
+    if (!item) {
+      throw new functions.https.HttpsError('not-found', 'ไม่พบรายการ');
+    }
+
+    return db.runTransaction(async (transaction) => {
+      // create order
+      let data = {
+        sid: item.sid(),
+        uid: context.auth.uid,
+        item: {
+          id: item.id(),
+          name: item.name(),
+          description: item.description(),
+          cost: item.cost(),
+          covers: item.covers(),
+          files: item.files(),
+          tags: item.tags(),
+          storeName: item.storeName()
+        }
+      };
+      const order = new Order(data);
+      const orderResult = await order.create(transaction);
+      data.id = orderResult.id;
+      const result = await payment.start(data);
+      result.oid = orderResult.id;
+      result.uid = context.auth.uid;
+      result.createdAt = new Date();
+      result.updatedAt = new Date();
+      // store result to thaiQR collection
+      const thaiQRDocRef = db.collection('thaiQR').doc(orderResult.id);
+      transaction.create(thaiQRDocRef, result);
+      return result;
+    });
+  } catch (error) {
+    console.error(error);
+    throw new functions.https.HttpsError('internal', 'Internal Server Error');
+  }
+});
+
+exports.buyItemCallback = functions.https.onRequest((request, response) => {
+  const redirectURI = 'http://localhost:3000'
+  // payment gateway callback
+  // ...
+  if (!request.query.oid || !request.query.itemId || !request.query.sid) {
+    return response.redirect(`${redirectURI}/orders/error`);
+  }
+  const oid = request.query.oid;
+  const itemId = request.query.itemId;
+  const sid =request.query.sid;
+  return db.runTransaction(async (transaction) => {
+    // get item by itemId
+    const item = await Item.find(request.query.itemId);
+    // update sold item
+    await item.sold(transaction);
+    // update order
+    await order.success(oid, transaction);
+    // create inventories
+    const inventory = new Inventory({
+      sid: item.sid,
+      uid: uid,
+      itemId: item.id,
+      name: item.name,
+      description: item.description,
+      cost: item.cost,
+      covers: item.covers,
+      files: item.files,
+      tags: item.tags,
+      storeName: item.storeName
+    });
+    await inventory.create(transaction);
+  }).then(() => {
+    return response.redirect(`${redirectURI}/stores/${sid}/items/${itemId}/orders/payment/success`);
+  }).catch((error) => {
+    console.error(error);
+    throw new functions.https.HttpsError('internal', 'Internal Server Error');
+  })
 });

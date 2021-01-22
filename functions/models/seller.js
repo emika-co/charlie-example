@@ -1,3 +1,4 @@
+const { firestore } = require('firebase-admin');
 const admin = require('firebase-admin');
 const db = admin.firestore();
 
@@ -93,6 +94,7 @@ var Seller = (() => {
         return 'ชื่อร้านค้าถูกใช้งานแล้ว';
       }
     } catch (error) {
+      console.log(error);
       throw error;
     }
   });
@@ -116,6 +118,23 @@ var Seller = (() => {
       sellersDocRef.id = seller.uid;
       return sellersDocRef;
     } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  });
+
+  Seller.updateDashboard = (async (item, transaction) => {
+    try {
+      const sellerDocRef = db.collection('sellers').doc(item.sid);
+      const increaseBy = firestore.FieldValue.increment(item.cost);
+      await transaction.update(sellerDocRef, {
+        dashboard: {
+          totalWealth: increaseBy,
+          updatedAt: new Date()
+        }
+      });
+    } catch (error) {
+      console.log(error);
       throw error;
     }
   });
