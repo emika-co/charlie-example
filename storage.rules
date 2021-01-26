@@ -1,16 +1,18 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-  	match /users/{user}/items/{item} {
-      match /covers/{allPaths=**} {
-        allow read: if true;
-        allow write: if request.auth.uid == user
-          && request.resource.size < 2 * 1024 * 1024;
-        allow create, delete: if request.auth.uid == user;
-      }
-      match /secrets/{allPaths=**} {
-        allow read, write, create, delete: if request.auth.uid == user
-          && request.resource.size < 20 * 1024 * 1024;
+  	match /users/{user} {
+    	match /items/{item} {
+      	match /covers/{allPaths=**} {
+          allow read: if true;
+          allow write: if request.auth.uid == user
+            && request.resource.size < 2 * 1024 * 1024;
+          allow create, delete: if request.auth.uid == user;
+        }
+        match /secrets/{allPaths=**} {
+          allow read, write, create, delete: if request.auth.uid == user;
+          allow write, create: if request.resource.size < 20 * 1024 * 1024;
+        }
       }
     }
     match /public/{allPaths=**} {
