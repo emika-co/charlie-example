@@ -18,7 +18,7 @@ if (process.env.environment !== 'production') {
 }
 
 export const auth = firebase.auth
-export const functions = firebase.functions()
+export const functions = firebase.app().functions('asia-southeast2')
 export const firestore = firebase.firestore()
 export const firebaseAnalytics = firebase.analytics
 export const storage = firebase.storage
