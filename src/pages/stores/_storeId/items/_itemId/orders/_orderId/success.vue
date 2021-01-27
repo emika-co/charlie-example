@@ -75,7 +75,11 @@ export default {
         const result = await getItem({
           itemId: this.$route.params.itemId
         })
-        this.item = result.data
+        if (result.data) {
+          this.item = result.data
+        } else {
+          this.$router.push('/_')
+        }
       } catch (error) {
         this.$swal.fire(
           'เกิดข้อผิดพลาด',
