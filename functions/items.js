@@ -1,4 +1,4 @@
-const functions = require('firebase-functions');
+const functions = require('firebase-functions').region('asia-southeast2');
 const admin = require('firebase-admin');
 const db = admin.firestore();
 const Item = require('./models/item');
@@ -77,7 +77,10 @@ exports.updateItem = functions.https.onCall(async (data, context) => {
   }
 });
 
-exports.buyItem = functions.https.onCall(async (data, context) => {
+exports.buyItem = functions.runWith({
+  vpcConnector: 'cloud-functions-vpc',
+  vpcConnectorEgressSettings: 'PRIVATE_RANGES_ONLY'
+}).https.onCall(async (data, context) => {
   try {
     const payment = await Payment.find(data.paymentId);
     if (!payment.exists) {
@@ -113,6 +116,7 @@ exports.buyItem = functions.https.onCall(async (data, context) => {
       result.createdAt = new Date();
       result.updatedAt = new Date();
       // store result to thaiQR collection
+      console.log('storing order result to db')
       const thaiQRDocRef = db.collection('thaiQR').doc(orderResult.id);
       transaction.create(thaiQRDocRef, result);
       return result;
@@ -121,43 +125,4 @@ exports.buyItem = functions.https.onCall(async (data, context) => {
     console.error(error);
     throw new functions.https.HttpsError('internal', 'Internal Server Error');
   }
-});
-
-exports.buyItemCallback = functions.https.onRequest((request, response) => {
-  const redirectURI = 'http://localhost:3000'
-  // payment gateway callback
-  // ...
-  if (!request.query.oid || !request.query.itemId || !request.query.sid) {
-    return response.redirect(`${redirectURI}/orders/error`);
-  }
-  const oid = request.query.oid;
-  const itemId = request.query.itemId;
-  const sid =request.query.sid;
-  return db.runTransaction(async (transaction) => {
-    // get item by itemId
-    const item = await Item.find(request.query.itemId);
-    // update sold item
-    await item.sold(transaction);
-    // update order
-    await order.success(oid, transaction);
-    // create inventories
-    const inventory = new Inventory({
-      sid: item.sid,
-      uid: uid,
-      itemId: item.id,
-      name: item.name,
-      description: item.description,
-      cost: item.cost,
-      covers: item.covers,
-      files: item.files,
-      tags: item.tags,
-      storeName: item.storeName
-    });
-    await inventory.create(transaction);
-  }).then(() => {
-    return response.redirect(`${redirectURI}/stores/${sid}/items/${itemId}/orders/payment/success`);
-  }).catch((error) => {
-    console.error(error);
-    throw new functions.https.HttpsError('internal', 'Internal Server Error');
-  })
 });

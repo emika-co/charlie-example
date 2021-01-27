@@ -1,4 +1,4 @@
-const functions = require('firebase-functions');
+const functions = require('firebase-functions').region('asia-southeast2');
 const admin = require('firebase-admin');
 const db = admin.firestore();
 const Order = require('./models/order');
@@ -66,23 +66,23 @@ exports.paymentConfirmation = functions.https.onRequest(async (request, response
         const order = await Order.find(thaiQR.oid);
         await db.runTransaction(async (transaction) => {
           // get item by itemId
-          const item = await Item.find(order.item.id);
+          const item = await Item.find(order.item().id);
           // update sold item
           await item.sold(transaction);
           // update order
-          await order.success(thaiQR.oid);
+          await order.success(transaction);
           // create inventories
           const inventory = new Inventory({
-            sid: item.sid,
-            uid: order.uid,
-            itemId: item.id,
-            name: item.name,
-            description: item.description,
-            cost: item.cost,
-            covers: item.covers,
-            files: item.files,
-            tags: item.tags,
-            storeName: item.storeName
+            sid: item.sid(),
+            uid: order.uid(),
+            itemId: item.id(),
+            name: item.name(),
+            description: item.description(),
+            cost: item.cost(),
+            covers: item.covers(),
+            files: item.files(),
+            tags: item.tags(),
+            storeName: item.storeName()
           });
           await inventory.create(transaction);
         })

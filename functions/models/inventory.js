@@ -14,8 +14,8 @@ var inventory = {
   storeName: ''
 };
 
-var Inventory = (() => {
-  function Inventory (data) {
+let Inventory = class {
+  constructor (data) {
     inventory.sid = data.sid;
     inventory.uid = data.uid;
     inventory.itemId = data.itemId;
@@ -27,9 +27,10 @@ var Inventory = (() => {
     inventory.tags = data.tags;
     inventory.storeName = data.storeName;
   }
-
-  Inventory.get = (async () => {
+  
+  static async get (data) {
     try {
+      console.log(inventory)
       const itemRef = db.collection('inventories')
                         .where('uid', '==', data.uid)
                         .where('itemId', '==', data.itemId);
@@ -37,18 +38,18 @@ var Inventory = (() => {
       let item = {};
       if (snapshot.size) {
         snapshot.forEach((doc) => {
+          console.log(item.id)
           item = doc.data();
           item.id = doc.id;
         });
       }
       return item;
     } catch (error) {
-      console.log(error);
       throw error;
     }
-  });
+  }
 
-  Inventory.prototype.create = (async (transaction) => {
+  async create (transaction) {
     const inventoryDocRef = db.collection('inventories').doc();
     return await transaction.set(inventoryDocRef, {
       sid: inventory.sid,
@@ -64,9 +65,7 @@ var Inventory = (() => {
       createdAt: new Date(),
       updatedAt: new Date()
     });
-  });
-
-  return Inventory;
-})();
+  }
+}
 
 module.exports = Inventory

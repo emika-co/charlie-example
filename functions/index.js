@@ -3,6 +3,7 @@ admin.initializeApp();
 const sellers = require('./sellers');
 const items = require('./items');
 const payments = require('./payments');
+const test = require('./test');
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
@@ -19,3 +20,5 @@ exports.showItem = items.showItem;
 exports.updateItem = items.updateItem;
 exports.buyItem = items.buyItem;
 exports.paymentConfirmation = payments.paymentConfirmation;
+
+exports.test = test.test;

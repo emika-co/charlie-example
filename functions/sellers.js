@@ -1,4 +1,4 @@
-const functions = require('firebase-functions');
+const functions = require('firebase-functions').region('asia-southeast2');
 const Seller = require('./models/seller');
 
 exports.createSellers = functions.https.onCall(async (data, context) => {
