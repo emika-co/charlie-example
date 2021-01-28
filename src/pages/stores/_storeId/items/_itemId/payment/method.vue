@@ -22,6 +22,7 @@
       <div class="input-group mb-3 mx-3">
         <input
           ref="email"
+          v-model="email"
           type="text"
           class="form-control px-0"
           placeholder="ระบุอีเมลล์ของคุณ"
@@ -77,6 +78,7 @@ export default {
         createdAt: {},
         updatedAt: {}
       },
+      email: '',
       paymentMethods: [],
       paymentId: ''
     }
@@ -136,7 +138,23 @@ export default {
     paymentMethod (pid) {
       this.paymentId = pid
     },
+    checkoutValidator () {
+      if (!this.auth) {
+        if (!this.email) {
+          return false
+        }
+      }
+      return true
+    },
     async checkout () {
+      if (!this.checkoutValidator()) {
+        this.$swal.fire(
+          'เกิดข้อผิดพลาด',
+          'กรุณากรอกอีเมลล์',
+          'error'
+        )
+        return
+      }
       this.$store.dispatch('loading', true)
       const buyItem = functions.httpsCallable('buyItem')
       try {
