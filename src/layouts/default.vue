@@ -19,7 +19,9 @@ export default {
       await this.$store.dispatch('user/onAuth')
       await this.$store.dispatch('seller/initStore')
       if (this.$store.getters['user/isAuthenticated']) {
-        if (this.$route.path === '/') {
+        if (this.$route.query.redirect) {
+          this.$router.push(this.$route.query.redirect)
+        } else if (this.$route.path === '/') {
           this.$store.dispatch('loading', false)
           this.$router.push(this.$store.getters['user/getAuthRedirectURL'])
         }

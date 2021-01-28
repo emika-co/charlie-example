@@ -38,11 +38,17 @@
               </p>
             </div>
           </div>
-          <div v-if="!isAuthenticated">
+          <div v-if="!isAuthenticated" class="text-center">
             <hr>
-            <p class="text-center">
+            <nuxt-link
+              :to="{
+                name: 'index',
+                query: { redirect: $route.path }
+              }"
+              class="app-link"
+            >
               คุณยังไม่ได้เข้าสู่ระบบ
-            </p>
+            </nuxt-link>
           </div>
           <hr>
           <button class="btn btn-primary w-100" @click="paymentMethod()">
