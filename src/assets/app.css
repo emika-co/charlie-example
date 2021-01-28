@@ -161,6 +161,10 @@ input[type="color"]:focus,
   transition-duration: 0.3s;
 }
 
+.disabled {
+  cursor: initial;
+}
+
 .sub-text {
   font-size: 0.8rem;
 }
