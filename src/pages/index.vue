@@ -15,7 +15,6 @@
 import FacebookLogin from '~/components/auth/FacebookLogin.vue'
 import GoogleLogin from '~/components/auth/GoogleLogin.vue'
 export default {
-  name: 'Login',
   middleware: ['home'],
   components: { FacebookLogin, GoogleLogin }
 }
