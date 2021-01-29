@@ -138,16 +138,20 @@ export default {
     paymentMethod (pid) {
       this.paymentId = pid
     },
-    checkoutValidator () {
+    async checkoutValidator () {
       if (!this.auth) {
         if (!this.email) {
           return false
+        } else {
+          // auth
+          await this.$store.dispatch('user/signInAnonymously')
+          await this.$store.dispatch('user/onAuthStateChangedAnonymous', this.email)
         }
       }
       return true
     },
     async checkout () {
-      if (!this.checkoutValidator()) {
+      if (!await this.checkoutValidator()) {
         this.$swal.fire(
           'เกิดข้อผิดพลาด',
           'กรุณากรอกอีเมลล์',

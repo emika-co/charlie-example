@@ -93,6 +93,22 @@ export const actions = {
       console.log(error)
     }
   },
+  async signInAnonymously () {
+    try {
+      await auth().signInAnonymously()
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error)
+    }
+  },
+  onAuthStateChangedAnonymous () {
+    try {
+      auth().onAuthStateChanged()
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error)
+    }
+  },
   // eslint-disable-next-line no-empty-pattern
   async signInWithRedirect ({ }, provider) {
     return await auth().signInWithRedirect(provider)
