@@ -24,10 +24,10 @@ var Item = (() => {
     item.description = data.description;
     item.cost = data.cost;
     item.covers = data.covers;
-    item.sid = data.sid;
     item.files = data.files;
     item.tags = data.tags;
     item.storeName = data.storeName;
+    item.sid = data.sid;
   }
 
   // get functions

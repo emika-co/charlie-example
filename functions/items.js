@@ -56,7 +56,7 @@ exports.showItem = functions.https.onCall(async (data, _) => {
 });
 
 exports.updateItem = functions.https.onCall(async (data, context) => {
-  data.uid = context.auth.uid;
+  data.sid = context.auth.uid;
   const i = new Item(data);
   // validate
   const invalid = await i.validate();
@@ -83,7 +83,7 @@ exports.buyItem = functions.runWith({
   vpcConnectorEgressSettings: 'PRIVATE_RANGES_ONLY'
 }).https.onCall(async (data, context) => {
   if (!context.auth) {
-    throw new https.HttpsError('unauthenticated', 'กรุณาล็อคอินใหม่');
+    throw new https.HttpsError('unauthenticated', 'กรุณาล็อคอิน');
   }
   try {
     const payment = await Payment.find(data.paymentId);
