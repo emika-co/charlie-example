@@ -81,7 +81,7 @@ let ThaiQR = class {
       throw error;
     }
   }
-  
+
   static async getAccessToken () {
     const data = JSON.stringify({
       applicationKey: thaiQR.app.key,

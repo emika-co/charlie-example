@@ -1,4 +1,5 @@
 const functions = require('firebase-functions').region('asia-southeast2');
+const { https } = require('firebase-functions');
 const admin = require('firebase-admin');
 const db = admin.firestore();
 const Order = require('./models/order');
@@ -90,6 +91,6 @@ exports.paymentConfirmation = functions.https.onRequest(async (request, response
     }
   } catch (error) {
     console.error(error);
-    throw new functions.https.HttpsError('internal', 'Internal Server Error');
+    throw new https.HttpsError('internal', 'Internal Server Error');
   }
 });

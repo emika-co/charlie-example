@@ -1,4 +1,5 @@
 const functions = require('firebase-functions').region('asia-southeast2');
+const { https } = require('firebase-functions');
 const Seller = require('./models/seller');
 
 exports.createSellers = functions.https.onCall(async (data, context) => {
@@ -7,7 +8,7 @@ exports.createSellers = functions.https.onCall(async (data, context) => {
   // validate
   const invalid = await s.validate();
   if (invalid) {
-    throw new functions.https.HttpsError('invalid-argument', invalid);
+    throw new https.HttpsError('invalid-argument', invalid);
   }
   // create
   try {
@@ -16,6 +17,6 @@ exports.createSellers = functions.https.onCall(async (data, context) => {
       _id: docRef.id
     }
   } catch (error) {
-    throw new functions.https.HttpsError('internal', 'Internal Server Error');
+    throw new https.HttpsError('internal', 'Internal Server Error');
   }
 });

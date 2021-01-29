@@ -1,4 +1,5 @@
 const functions = require('firebase-functions').region('asia-southeast2');
+const { https } = require('firebase-functions');
 const admin = require('firebase-admin');
 const db = admin.firestore();
 const Item = require('./models/item');
@@ -16,7 +17,7 @@ exports.getItem = functions.https.onCall(async (data, context) => {
     return item;
   } catch (error) {
     console.error(error);
-    throw new functions.https.HttpsError('internal', 'Internal Server Error');
+    throw new https.HttpsError('internal', 'Internal Server Error');
   }
 });
 
@@ -26,7 +27,7 @@ exports.createItem = functions.https.onCall(async (data, context) => {
   // validate
   const invalid = await i.validate();
   if (invalid) {
-    throw new functions.https.HttpsError('invalid-argument', invalid);
+    throw new https.HttpsError('invalid-argument', invalid);
   }
   // create
   try {
@@ -36,7 +37,7 @@ exports.createItem = functions.https.onCall(async (data, context) => {
     }
   } catch (error) {
     console.error(error);
-    throw new functions.https.HttpsError('internal', 'Internal Server Error');
+    throw new https.HttpsError('internal', 'Internal Server Error');
   }
 });
 
@@ -50,7 +51,7 @@ exports.showItem = functions.https.onCall(async (data, _) => {
     return null;
   } catch (error) {
     console.error(error);
-    throw new functions.https.HttpsError('internal', 'Internal Server Error');
+    throw new https.HttpsError('internal', 'Internal Server Error');
   }
 });
 
@@ -60,7 +61,7 @@ exports.updateItem = functions.https.onCall(async (data, context) => {
   // validate
   const invalid = await i.validate();
   if (invalid) {
-    throw new functions.https.HttpsError('invalid-argument', invalid);
+    throw new https.HttpsError('invalid-argument', invalid);
   }
   try {
     return await i.update({
@@ -73,7 +74,7 @@ exports.updateItem = functions.https.onCall(async (data, context) => {
     });
   } catch (error) {
     console.error(error);
-    throw new functions.https.HttpsError('internal', 'Internal Server Error');
+    throw new https.HttpsError('internal', 'Internal Server Error');
   }
 });
 
@@ -81,14 +82,17 @@ exports.buyItem = functions.runWith({
   vpcConnector: 'cloud-functions-vpc',
   vpcConnectorEgressSettings: 'PRIVATE_RANGES_ONLY'
 }).https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new https.HttpsError('unauthenticated', 'กรุณาล็อคอินใหม่');
+  }
   try {
     const payment = await Payment.find(data.paymentId);
     if (!payment.exists) {
-      throw new functions.https.HttpsError('not-found', 'โปรดระบุวิธีการชำระเงิน');
+      throw new https.HttpsError('not-found', 'โปรดระบุวิธีการชำระเงิน');
     }
     const item = await Item.find(data.itemId);
     if (!item) {
-      throw new functions.https.HttpsError('not-found', 'ไม่พบรายการ');
+      throw new https.HttpsError('not-found', 'ไม่พบรายการ');
     }
 
     return db.runTransaction(async (transaction) => {
@@ -116,13 +120,12 @@ exports.buyItem = functions.runWith({
       result.createdAt = new Date();
       result.updatedAt = new Date();
       // store result to thaiQR collection
-      console.log('storing order result to db')
       const thaiQRDocRef = db.collection('thaiQR').doc(orderResult.id);
       transaction.create(thaiQRDocRef, result);
       return result;
     });
   } catch (error) {
     console.error(error);
-    throw new functions.https.HttpsError('internal', 'Internal Server Error');
+    throw new https.HttpsError('internal', 'Internal Server Error');
   }
 });
