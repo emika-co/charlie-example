@@ -40,7 +40,6 @@
 import { functions } from '~/plugins/firebase'
 export default {
   layout: 'default',
-  middleware: ['auth'],
   data () {
     return {
       item: {
