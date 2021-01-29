@@ -123,20 +123,15 @@ var Seller = (() => {
     }
   });
 
-  Seller.updateDashboard = (async (item, transaction) => {
-    try {
-      const sellerDocRef = db.collection('sellers').doc(item.sid);
-      const increaseBy = firestore.FieldValue.increment(item.cost);
-      await transaction.update(sellerDocRef, {
-        dashboard: {
-          totalWealth: increaseBy,
-          updatedAt: new Date()
-        }
-      });
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
+  Seller.updateDashboard = ((sid, cost, transaction) => {
+    const sellerDocRef = db.collection('sellers').doc(sid);
+    const increaseBy = firestore.FieldValue.increment(cost);
+    transaction.update(sellerDocRef, {
+      dashboard: {
+        totalWealth: increaseBy,
+        updatedAt: new Date()
+      }
+    });
   });
 
   return Seller;
