@@ -27,7 +27,6 @@ import { firestore } from '~/plugins/firebase'
 export default {
   name: 'QRCode',
   layout: 'public',
-  middleware: ['auth'],
   data () {
     return {
       qrData: {
