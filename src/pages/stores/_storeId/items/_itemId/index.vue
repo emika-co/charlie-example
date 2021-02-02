@@ -99,7 +99,7 @@
                   <img src="~/assets/check.svg" class="green-checker">
                 </div>
                 <div>
-                  <p>รับรองคุณภาพโดย Charlie</p>
+                  <p>รับรองคุณภาพโดย Filolo App</p>
                 </div>
               </div>
             </div>

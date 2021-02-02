@@ -3,7 +3,7 @@
     <div class="align-self-center w-100">
       <Logo class="d-flex justify-content-center" />
       <h1 class="title text-center">
-        Project Charlie
+        Filolo App
       </h1>
       <facebook-login class="mb-3" />
       <google-login />
