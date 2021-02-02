@@ -2,35 +2,41 @@ const functions = require('firebase-functions').region('asia-southeast2');
 const admin = require('firebase-admin');
 const db = admin.firestore();
 const async = require('async');
-const seller = require('./models/seller');
+const Seller = require('./models/seller');
 
 function dispatchListOrder (list, transaction) {
-  list.forEach((doc) => {
-    const o = doc.data();
-    seller.updateDashboard(o.sid, o.item.cost, transaction);
-    transaction.update({
-      withdraw: true,
-      updatedAt: new Date()
+  if (Array.isArray(list)) {
+    list.forEach((doc) => {
+      const o = doc.data();
+      Seller.updateDashboard(o.sid, o.item.cost, transaction);
+      const orderRef = db.collection('orders').doc(doc.id);
+      transaction.update(orderRef, {
+        withdraw: true,
+        updatedAt: new Date()
+      });
     });
-  });
+  }
 }
 
-exports.updateDashboard = functions.pubsub.schedule('every 1 minutes').onRun(async (_) => {
+exports.updateDashboard = functions.pubsub.schedule('every 1 hours').onRun(async (_) => {
   const orderRef = db.collection('orders').where('status', '==', 'S')
                                         .where('withdraw', '==', false);
   const snapsnot = await orderRef.orderBy('updatedAt', 'asc').limit(100).get();
 
-  // parallel
   let listDoc1 = [];
   let listDoc2 = [];
-  for (let index = 0; index < snapsnot.size; index++) {
-    const doc = snapsnot[index];
-    if (index < (snapsnot.size / 2)) {
+  let i = 0;
+  const snapshotSize = snapsnot.size;
+  snapsnot.forEach((doc) => {
+    console.log(doc.id)
+    if (i < (snapshotSize / 2)) {
       listDoc1.push(doc);
     } else {
       listDoc2.push(doc);
     }
-  }
+    i++;
+  });
+
   async.parallel([
     function (callback) {
       db.runTransaction((transaction) => {

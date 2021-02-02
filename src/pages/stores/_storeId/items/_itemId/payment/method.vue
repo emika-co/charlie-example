@@ -141,6 +141,11 @@ export default {
     async checkoutValidator () {
       if (!this.auth) {
         if (!this.email) {
+          this.$swal.fire(
+            'เกิดข้อผิดพลาด',
+            'กรุณากรอกอีเมลล์',
+            'error'
+          )
           return false
         } else {
           // auth
@@ -152,11 +157,6 @@ export default {
     },
     async checkout () {
       if (!await this.checkoutValidator()) {
-        this.$swal.fire(
-          'เกิดข้อผิดพลาด',
-          'กรุณากรอกอีเมลล์',
-          'error'
-        )
         return
       }
       this.$store.dispatch('loading', true)
@@ -164,7 +164,8 @@ export default {
       try {
         const result = await buyItem({
           itemId: this.$route.params.itemId,
-          paymentId: this.paymentId
+          paymentId: this.paymentId,
+          email: this.email
         })
         this.$store.dispatch('loading', false)
         if (result.data.method === 'qr') {

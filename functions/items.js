@@ -82,8 +82,15 @@ exports.buyItem = functions.runWith({
   vpcConnector: 'cloud-functions-vpc',
   vpcConnectorEgressSettings: 'PRIVATE_RANGES_ONLY'
 }).https.onCall(async (data, context) => {
+  let email = '';
   if (!context.auth) {
     throw new https.HttpsError('unauthenticated', 'กรุณาล็อคอิน');
+  } else if (context.auth.token.email) {
+    email = context.auth.token.email;
+  } else if (data.email) {
+    email = data.email;
+  } else {
+    throw new https.HttpsError('unauthenticated', 'กรุณากรอกอีเมลล์');
   }
   try {
     const payment = await Payment.find(data.paymentId);
@@ -100,6 +107,7 @@ exports.buyItem = functions.runWith({
       let data = {
         sid: item.sid(),
         uid: context.auth.uid,
+        email: email,
         item: {
           id: item.id(),
           name: item.name(),

@@ -7,6 +7,7 @@ var order = {
   id: '',
   sid: '',
   uid: '',
+  email: '',
   item: {
     id: '',
     name: '',
@@ -32,6 +33,7 @@ var Order = (() => {
     order.id = data.id;
     order.sid = data.sid;
     order.uid = data.uid;
+    order.email = data.email;
     order.item.id = data.item.id;
     order.item.name = data.item.name;
     order.item.description = data.item.description;
@@ -49,6 +51,7 @@ var Order = (() => {
       let data = {
         sid: order.sid,
         uid: order.uid,
+        email: order.email,
         item: {
           id: order.item.id,
           name: order.item.name,
@@ -79,6 +82,9 @@ var Order = (() => {
   });
   Order.prototype.uid = (() => {
     return order.uid;
+  });
+  Order.prototype.email = (() => {
+    return order.email;
   });
 
   Order.prototype.success = (async (transaction) => {

@@ -5,6 +5,7 @@ const db = admin.firestore();
 const Order = require('./models/order');
 const Item = require('./models/item');
 const Inventory = require('./models/inventory');
+const Email = require('./models/mail');
 
 exports.paymentConfirmation = functions.https.onRequest(async (request, response) => {
   try {
@@ -86,6 +87,13 @@ exports.paymentConfirmation = functions.https.onRequest(async (request, response
             storeName: item.storeName()
           });
           await inventory.create(transaction);
+          // send email
+          const downloadLink = item.files();
+          const m = new Email({
+            receiver: order.email(),
+            downloadLink: downloadLink[0]
+          });
+          m.send();
         })
       }
     }
