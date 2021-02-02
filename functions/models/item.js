@@ -157,7 +157,7 @@ var Item = (() => {
       // success
       return null;
     }).catch((error) => {
-      console.log(error);
+      console.error(error);
       throw error;
     });
   });
@@ -195,7 +195,7 @@ var Item = (() => {
       }
       return null;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       throw error;
     }
   });

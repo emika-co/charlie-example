@@ -30,7 +30,6 @@ let Inventory = class {
   
   static async get (data) {
     try {
-      console.log(inventory)
       const itemRef = db.collection('inventories')
                         .where('uid', '==', data.uid)
                         .where('itemId', '==', data.itemId);
@@ -38,7 +37,6 @@ let Inventory = class {
       let item = {};
       if (snapshot.size) {
         snapshot.forEach((doc) => {
-          console.log(item.id)
           item = doc.data();
           item.id = doc.id;
         });

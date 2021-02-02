@@ -31,7 +31,6 @@ let Mail = class {
     data.append('subject', emailData.subject);
     data.append('template', emailData.template);
     data.append('h:X-Mailgun-Variables', JSON.stringify({download_link: emailData.downloadLink}));
-    // const headers = form.getHeaders();
     var config = {
       method: 'post',
       url: mailgunInfo.endpoint,

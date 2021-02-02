@@ -94,7 +94,7 @@ var Seller = (() => {
         return 'ชื่อร้านค้าถูกใช้งานแล้ว';
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       throw error;
     }
   });
@@ -118,7 +118,7 @@ var Seller = (() => {
       sellersDocRef.id = seller.uid;
       return sellersDocRef;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       throw error;
     }
   });

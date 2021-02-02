@@ -72,7 +72,7 @@ var Order = (() => {
         id: oid
       };
     } catch (error) {
-      console.log(error);
+      console.error(error);
       throw error;
     }
   });
@@ -119,7 +119,7 @@ var Order = (() => {
         updatedAt: new Date()
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
       throw error;
     }
   });
@@ -134,13 +134,14 @@ var Order = (() => {
           id: snapshot.id,
           sid: result.sid,
           uid: result.uid,
+          email: result.email,
           item: result.item
         })
         return o;
       }
       return null;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       throw error;
     }
   });
