@@ -18,7 +18,10 @@ function dispatchListOrder (list, transaction) {
   }
 }
 
-exports.updateDashboard = functions.pubsub.schedule('every 1 hours').onRun(async (_) => {
+exports.updateDashboard = functions.runWith({
+  vpcConnector: 'cloud-functions-vpc',
+  vpcConnectorEgressSettings: 'PRIVATE_RANGES_ONLY'
+}).pubsub.schedule('every 1 hours').onRun(async (_) => {
   const orderRef = db.collection('orders').where('status', '==', 'S')
                                         .where('withdraw', '==', false);
   const snapsnot = await orderRef.orderBy('updatedAt', 'asc').limit(100).get();
@@ -38,7 +41,7 @@ exports.updateDashboard = functions.pubsub.schedule('every 1 hours').onRun(async
   });
 
   async.parallel([
-    function (callback) {
+    async function (callback) {
       db.runTransaction((transaction) => {
         dispatchListOrder(listDoc1, transaction)
       }).then(() => {
@@ -46,7 +49,7 @@ exports.updateDashboard = functions.pubsub.schedule('every 1 hours').onRun(async
         callback(null, 'list1');
       })
     },
-    function (callback) {
+    async function (callback) {
       db.runTransaction((transaction) => {
         dispatchListOrder(listDoc2, transaction)
       }).then(() => {
