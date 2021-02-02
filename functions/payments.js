@@ -5,9 +5,12 @@ const db = admin.firestore();
 const Order = require('./models/order');
 const Item = require('./models/item');
 const Inventory = require('./models/inventory');
-const Email = require('./models/mail');
+const Mail = require('./models/mail');
 
-exports.paymentConfirmation = functions.https.onRequest(async (request, response) => {
+exports.paymentConfirmation = functions.runWith({
+  vpcConnector: 'cloud-functions-vpc',
+  vpcConnectorEgressSettings: 'PRIVATE_RANGES_ONLY'
+}).https.onRequest(async (request, response) => {
   try {
     await db.collection('paymentConfirms').add({
       transactionId: request.body.transactionId?request.body.transactionId:'',
@@ -89,11 +92,11 @@ exports.paymentConfirmation = functions.https.onRequest(async (request, response
           await inventory.create(transaction);
           // send email
           const downloadLink = item.files();
-          const m = new Email({
+          const m = new Mail({
             receiver: order.email(),
             downloadLink: downloadLink[0]
           });
-          m.send();
+          await m.send();
         })
       }
     }

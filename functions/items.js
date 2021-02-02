@@ -8,7 +8,10 @@ const Order = require('./models/order');
 const Payment = require('./models/payment');
 
 // get item from inventory
-exports.getItem = functions.https.onCall(async (data, context) => {
+exports.getItem = functions.runWith({
+  vpcConnector: 'cloud-functions-vpc',
+  vpcConnectorEgressSettings: 'PRIVATE_RANGES_ONLY'
+}).https.onCall(async (data, context) => {
   try {
     const item = await Inventory.get({
       itemId: data.itemId,
@@ -21,7 +24,10 @@ exports.getItem = functions.https.onCall(async (data, context) => {
   }
 });
 
-exports.createItem = functions.https.onCall(async (data, context) => {
+exports.createItem = functions.runWith({
+  vpcConnector: 'cloud-functions-vpc',
+  vpcConnectorEgressSettings: 'PRIVATE_RANGES_ONLY'
+}).https.onCall(async (data, context) => {
   data.sid = context.auth.uid;
   const i = new Item(data);
   // validate
@@ -42,7 +48,10 @@ exports.createItem = functions.https.onCall(async (data, context) => {
 });
 
 // show item public
-exports.showItem = functions.https.onCall(async (data, _) => {
+exports.showItem = functions.runWith({
+  vpcConnector: 'cloud-functions-vpc',
+  vpcConnectorEgressSettings: 'PRIVATE_RANGES_ONLY'
+}).https.onCall(async (data, _) => {
   try {
     const item = await Item.find(data.itemId);
     if (item) {
@@ -55,7 +64,10 @@ exports.showItem = functions.https.onCall(async (data, _) => {
   }
 });
 
-exports.updateItem = functions.https.onCall(async (data, context) => {
+exports.updateItem = functions.runWith({
+  vpcConnector: 'cloud-functions-vpc',
+  vpcConnectorEgressSettings: 'PRIVATE_RANGES_ONLY'
+}).https.onCall(async (data, context) => {
   data.sid = context.auth.uid;
   const i = new Item(data);
   // validate

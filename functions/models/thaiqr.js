@@ -83,10 +83,10 @@ let ThaiQR = class {
   }
 
   static async getAccessToken () {
-    const data = JSON.stringify({
+    const data = {
       applicationKey: thaiQR.app.key,
       applicationSecret: thaiQR.app.secret
-    });
+    };
     const headers = {
       'Content-Type': 'application/json',
       'accept-language': 'EN',

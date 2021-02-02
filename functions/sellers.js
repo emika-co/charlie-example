@@ -2,7 +2,10 @@ const functions = require('firebase-functions').region('asia-southeast2');
 const { https } = require('firebase-functions');
 const Seller = require('./models/seller');
 
-exports.createSellers = functions.https.onCall(async (data, context) => {
+exports.createSellers = functions.runWith({
+  vpcConnector: 'cloud-functions-vpc',
+  vpcConnectorEgressSettings: 'PRIVATE_RANGES_ONLY'
+}).https.onCall(async (data, context) => {
   data.uid = context.auth.uid;
   const s = new Seller(data);
   // validate

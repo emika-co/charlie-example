@@ -4,6 +4,8 @@ const sellers = require('./sellers');
 const items = require('./items');
 const payments = require('./payments');
 const dashboard = require('./dashboard');
+const functions = require('firebase-functions');
+const Mail = require('./models/mail');
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
