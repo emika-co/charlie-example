@@ -82,7 +82,7 @@ exports.buyItem = functions.runWith({
   vpcConnector: 'cloud-functions-vpc',
   vpcConnectorEgressSettings: 'PRIVATE_RANGES_ONLY'
 }).https.onCall(async (data, context) => {
-  let email = '';
+  var email = '';
   if (!context.auth) {
     throw new https.HttpsError('unauthenticated', 'กรุณาล็อคอิน');
   } else if (context.auth.token.email) {
