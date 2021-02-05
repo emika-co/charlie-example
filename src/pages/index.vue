@@ -8,7 +8,7 @@
         <p>สมัครสมาชิก หรือเข้าสู่ระบบ</p>
       </div>
       <div class="spacer" />
-      <facebook-login class="mb-3" />
+      <!-- <facebook-login class="mb-3" /> -->
       <google-login />
       <div class="fixed-bottom">
         <p class="mb-4">
