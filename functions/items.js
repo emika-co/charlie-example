@@ -113,7 +113,6 @@ exports.buyItem = functions.runWith({
     if (!item) {
       throw new https.HttpsError('not-found', 'ไม่พบรายการ');
     }
-
     return db.runTransaction(async (transaction) => {
       // create order
       let data = {
