@@ -78,16 +78,17 @@ export default {
     },
     async fetchItems (page) {
       this.$store.dispatch('loading', true)
-      const lastDoc = this.totalPage * page
-      const itemRef = firestore.collection('inventories').where('uid', '==', this.user.uid).orderBy('createdAt', 'desc').startAt(lastDoc).limit(this.limit)
+      const itemRef = firestore.collection('inventories').where('uid', '==', this.user.uid).orderBy('createdAt', 'desc')
       const snapshot = await itemRef.get()
       this.items = []
-      let index = 0
-      while (index < this.limit && index < snapshot.size) {
+
+      for (let index = page - 1; index < this.limit; index++) {
+        if (index >= snapshot.size) {
+          break
+        }
         const i = snapshot.docs[index].data()
         i.id = snapshot.docs[index].id
         this.items.push(i)
-        index++
       }
       this.currentPage = page
       this.$store.dispatch('loading', false)

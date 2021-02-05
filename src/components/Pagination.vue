@@ -7,8 +7,8 @@
         </a>
       </li>
       <li v-for="(_, index) in totalPage" :key="index" class="page-item">
-        <a v-if="showButton(index)" class="page-link" href="#" @click="goToPage(index++)">
-          {{ index++ }}
+        <a v-if="showButton(index)" class="page-link" href="#" @click="goToPage(index + 1)">
+          {{ index + 1 }}
         </a>
       </li>
       <li class="page-item">
