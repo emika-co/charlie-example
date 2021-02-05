@@ -82,7 +82,8 @@ export default {
       const snapshot = await itemRef.get()
       this.items = []
 
-      for (let index = page - 1; index < this.limit; index++) {
+      const startDoc = (page - 1) * this.limit
+      for (let index = startDoc; index < this.limit; index++) {
         if (index >= snapshot.size) {
           break
         }

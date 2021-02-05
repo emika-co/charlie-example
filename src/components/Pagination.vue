@@ -7,7 +7,7 @@
         </a>
       </li>
       <li v-for="(_, index) in totalPage" :key="index" class="page-item">
-        <a v-if="showButton(index)" class="page-link" href="#" @click="goToPage(index + 1)">
+        <a v-if="showButton(index)" class="page-link" href="#" :class="{ 'active': isActive }" @click="goToPage(index)">
           {{ index + 1 }}
         </a>
       </li>
@@ -40,10 +40,16 @@ export default {
       this.$emit('loadPrevious')
     },
     goToPage (page) {
-      this.$emit('goToPage', page)
+      this.$emit('goToPage', page + 1)
     },
     showButton (index) {
       if (index <= this.current + 1) {
+        return true
+      }
+      return false
+    },
+    isActive (index) {
+      if (this.current === index + 1) {
         return true
       }
       return false
