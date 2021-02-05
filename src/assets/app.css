@@ -180,6 +180,7 @@ input[type="color"]:focus,
 
 @media (max-width: 575px) {
   .bg {
+    color: white;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
