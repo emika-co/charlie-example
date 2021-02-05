@@ -6,9 +6,9 @@
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
-      <li v-for="page in total" :key="page" class="page-item">
-        <a class="page-link" href="#">
-          {{ page }}
+      <li v-for="(_, index) in totalPage" :key="index" class="page-item">
+        <a v-if="showButton(index)" class="page-link" href="#" @click="goToPage(index++)">
+          {{ index++ }}
         </a>
       </li>
       <li class="page-item">
@@ -23,7 +23,7 @@
 <script>
 export default {
   props: {
-    total: {
+    totalPage: {
       default: 1,
       type: Number
     },
@@ -34,8 +34,19 @@ export default {
   },
   methods: {
     next () {
+      this.$emit('loadNext')
     },
     previous () {
+      this.$emit('loadPrevious')
+    },
+    goToPage (page) {
+      this.$emit('goToPage', page)
+    },
+    showButton (index) {
+      if (index <= this.current + 1) {
+        return true
+      }
+      return false
     }
   }
 }

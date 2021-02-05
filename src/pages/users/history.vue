@@ -8,7 +8,14 @@
       :cover-img="item.covers[0]"
       :download-link="item.files[0]"
     />
-    <pagination class="mb-3" />
+    <pagination
+      class="mb-3"
+      :total-page="totalPage"
+      :current="currentPage"
+      @loadNext="loadNext"
+      @loadPrevious="loadPrevious"
+      @goToPage="fetchItems"
+    />
   </div>
 </template>
 
@@ -24,7 +31,9 @@ export default {
     return {
       items: [],
       totalItem: 0,
-      limit: 25
+      limit: 25,
+      currentPage: 1,
+      totalPage: 1
     }
   },
   computed: {
@@ -40,18 +49,46 @@ export default {
   methods: {
     async getItems () {
       if (this.user.uid) {
-        const limit = this.limit
         const itemRef = firestore.collection('inventories').where('uid', '==', this.user.uid).orderBy('createdAt', 'desc')
         const snapshot = await itemRef.get()
         this.totalItem = snapshot.size
+        this.totalPage = Math.ceil(this.totalItem / this.limit)
         let index = 0
-        while (index < limit && index < snapshot.size) {
+        while (index < this.limit && index < snapshot.size) {
           const i = snapshot.docs[index].data()
           i.id = snapshot.docs[index].id
           this.items.push(i)
           index++
         }
       }
+    },
+    async loadNext () {
+      const page = this.currentPage + 1
+      if (page > this.totalPage) {
+        return
+      }
+      await this.fetchItems(page)
+    },
+    async loadPrevious () {
+      const page = this.currentPage - 1
+      if (page < 1) {
+        return
+      }
+      await this.fetchItems(page)
+    },
+    async fetchItems (page) {
+      const lastDoc = this.totalPage * page
+      const itemRef = firestore.collection('inventories').where('uid', '==', this.user.uid).orderBy('createdAt', 'desc').startAt(lastDoc).limit(this.limit)
+      const snapshot = await itemRef.get()
+      this.items = []
+      let index = 0
+      while (index < this.limit && index < snapshot.size) {
+        const i = snapshot.docs[index].data()
+        i.id = snapshot.docs[index].id
+        this.items.push(i)
+        index++
+      }
+      this.currentPage = page
     }
   }
 }
