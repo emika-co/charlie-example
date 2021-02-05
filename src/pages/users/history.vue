@@ -42,9 +42,19 @@ export default {
     }
   },
   async created () {
-    this.$store.dispatch('loading', true)
-    await this.getItems()
-    this.$store.dispatch('loading', false)
+    try {
+      this.$store.dispatch('loading', true)
+      await this.getItems()
+      this.$store.dispatch('loading', false)
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error)
+      return this.$swal.fire(
+        'เกิดข้อผิดพลาด',
+        '',
+        'error'
+      )
+    }
   },
   methods: {
     async getItems () {
@@ -53,31 +63,28 @@ export default {
         const snapshot = await itemRef.get()
         this.totalItem = snapshot.size
         this.totalPage = Math.ceil(this.totalItem / this.limit)
-        let index = 0
-        while (index < this.limit && index < snapshot.size) {
-          const i = snapshot.docs[index].data()
-          i.id = snapshot.docs[index].id
-          this.items.push(i)
-          index++
-        }
+        await this.fetchItems(1)
       }
     },
     async loadNext () {
+      this.$store.dispatch('loading', true)
       const page = this.currentPage + 1
       if (page > this.totalPage) {
         return
       }
       await this.fetchItems(page)
+      this.$store.dispatch('loading', false)
     },
     async loadPrevious () {
+      this.$store.dispatch('loading', true)
       const page = this.currentPage - 1
       if (page < 1) {
         return
       }
       await this.fetchItems(page)
+      this.$store.dispatch('loading', false)
     },
     async fetchItems (page) {
-      this.$store.dispatch('loading', true)
       const itemRef = firestore.collection('inventories').where('uid', '==', this.user.uid).orderBy('createdAt', 'desc')
       const snapshot = await itemRef.get()
       this.items = []
@@ -93,7 +100,6 @@ export default {
         this.items.push(i)
       }
       this.currentPage = page
-      this.$store.dispatch('loading', false)
     }
   }
 }
