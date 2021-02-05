@@ -18,7 +18,14 @@
         </p>
       </nuxt-link>
     </div>
-    <pagination class="mb-3" />
+    <pagination
+      class="mb-3"
+      :total-page="totalPage"
+      :current="currentPage"
+      @loadNext="loadNext"
+      @loadPrevious="loadPrevious"
+      @goToPage="fetchItems"
+    />
   </div>
 </template>
 
@@ -30,7 +37,9 @@ export default {
     return {
       items: [],
       totalItem: 0,
-      limit: 25
+      limit: 6,
+      currentPage: 1,
+      totalPage: 1
     }
   },
   computed: {
@@ -39,26 +48,64 @@ export default {
     }
   },
   async created () {
-    this.$store.dispatch('setPageTitle', 'สินค้าของฉัน')
-    this.$store.dispatch('loading', true)
-    await this.getItems()
-    this.$store.dispatch('loading', false)
+    try {
+      this.$store.dispatch('setPageTitle', 'สินค้าของฉัน')
+      this.$store.dispatch('loading', true)
+      await this.getItems()
+      this.$store.dispatch('loading', false)
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error)
+      return this.$swal.fire(
+        'เกิดข้อผิดพลาด',
+        '',
+        'error'
+      )
+    }
   },
   methods: {
     async getItems () {
       if (this.store.id) {
-        const limit = this.limit
         const itemRef = firestore.collection('items').where('sid', '==', this.store.id).orderBy('createdAt', 'desc')
         const snapshot = await itemRef.get()
         this.totalItem = snapshot.size
-        let index = 0
-        while (index < limit && index < snapshot.size) {
-          const i = snapshot.docs[index].data()
-          i.id = snapshot.docs[index].id
-          this.items.push(i)
-          index++
-        }
+        await this.fetchItems(1)
       }
+    },
+    async loadNext () {
+      this.$store.dispatch('loading', true)
+      const page = this.currentPage + 1
+      if (page > this.totalPage) {
+        return
+      }
+      await this.fetchItems(page)
+      this.$store.dispatch('loading', false)
+    },
+    async loadPrevious () {
+      this.$store.dispatch('loading', true)
+      const page = this.currentPage - 1
+      if (page < 1) {
+        return
+      }
+      await this.fetchItems(page)
+      this.$store.dispatch('loading', false)
+    },
+    async fetchItems (page) {
+      const itemRef = firestore.collection('items').where('sid', '==', this.store.id).orderBy('createdAt', 'desc')
+      const snapshot = await itemRef.get()
+      this.items = []
+
+      const startDoc = (page - 1) * this.limit
+      const lastDoc = startDoc + this.limit
+      for (let index = startDoc; index < lastDoc; index++) {
+        if (index >= snapshot.size) {
+          break
+        }
+        const i = snapshot.docs[index].data()
+        i.id = snapshot.docs[index].id
+        this.items.push(i)
+      }
+      this.currentPage = page
     },
     async copyURL (itemId) {
       try {
