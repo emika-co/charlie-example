@@ -54,6 +54,7 @@ exports.paymentConfirmation = functions.runWith({
       updatedAt: new Date()
     });
     response.status(204).send();
+    // should be run in queue
     if (request.body.billPaymentRef1 && request.body.billPaymentRef2 && request.body.billPaymentRef3) {
       const snapshot = await db.collection('thaiQR').where('data.ref1', '==', request.body.billPaymentRef1)
                                                   .where('data.ref2', '==', request.body.billPaymentRef2)
@@ -62,7 +63,7 @@ exports.paymentConfirmation = functions.runWith({
       if (snapshot.size) {
         if (snapshot.size > 1) {
           console.error('Found more than 1 thaiQR');
-          return response.status(204).send();
+          return;
         }
         let thaiQR = {};
         snapshot.forEach((doc) => {
