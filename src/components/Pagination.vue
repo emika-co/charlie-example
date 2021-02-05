@@ -6,8 +6,8 @@
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
-      <li v-for="(_, index) in totalPage" :key="index" class="page-item">
-        <a v-if="showButton(index)" class="page-link" href="#" :class="{ 'active': isActive }" @click="goToPage(index)">
+      <li v-for="(_, index) in totalPage" :key="index" class="page-item" :class="{ 'active': isActive }">
+        <a v-if="showButton(index)" class="page-link" href="#" @click="goToPage(index)">
           {{ index + 1 }}
         </a>
       </li>
