@@ -28,8 +28,8 @@ async function dispatchListOrder (listDoc) {
     });
   });
   // update dashboard
-  sellerDashboard.forEach((s) => {
-    Seller.updateDashboard(s.sid, s.cost, batch);
+  sellerDashboard.forEach(async (s) => {
+    await Seller.updateDashboard(s.sid, s.cost, batch);
   });
   return await batch.commit();
 }

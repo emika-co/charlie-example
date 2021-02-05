@@ -126,15 +126,19 @@ var Seller = (() => {
     }
   });
 
-  Seller.updateDashboard = ((sid, cost, transaction) => {
+  Seller.updateDashboard = (async (sid, cost, transaction) => {
     const sellerDocRef = db.collection('sellers').doc(sid);
-    const increaseBy = firestore.FieldValue.increment(cost);
-    transaction.update(sellerDocRef, {
-      dashboard: {
-        totalWealth: increaseBy,
-        updatedAt: new Date()
-      }
-    });
+    const snapshot = await sellerDocRef.get();
+    if (snapshot.exists) {
+      let dashboard = snapshot.data().dashboard;
+      dashboard.totalWealth += cost;
+      transaction.update(sellerDocRef, {
+        dashboard: {
+          totalWealth: dashboard.totalWealth,
+          updatedAt: new Date()
+        }
+      });
+    }
   });
 
   return Seller;
