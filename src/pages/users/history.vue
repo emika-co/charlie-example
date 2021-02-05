@@ -83,7 +83,8 @@ export default {
       this.items = []
 
       const startDoc = (page - 1) * this.limit
-      for (let index = startDoc; index < this.limit; index++) {
+      const lastDoc = startDoc + this.limit
+      for (let index = startDoc; index < lastDoc; index++) {
         if (index >= snapshot.size) {
           break
         }
