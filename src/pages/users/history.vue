@@ -31,7 +31,7 @@ export default {
     return {
       items: [],
       totalItem: 0,
-      limit: 25,
+      limit: 6,
       currentPage: 1,
       totalPage: 1
     }
@@ -77,6 +77,7 @@ export default {
       await this.fetchItems(page)
     },
     async fetchItems (page) {
+      this.$store.dispatch('loading', true)
       const lastDoc = this.totalPage * page
       const itemRef = firestore.collection('inventories').where('uid', '==', this.user.uid).orderBy('createdAt', 'desc').startAt(lastDoc).limit(this.limit)
       const snapshot = await itemRef.get()
@@ -89,6 +90,7 @@ export default {
         index++
       }
       this.currentPage = page
+      this.$store.dispatch('loading', false)
     }
   }
 }
