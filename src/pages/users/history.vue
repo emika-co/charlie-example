@@ -67,20 +67,20 @@ export default {
       }
     },
     async loadNext () {
-      this.$store.dispatch('loading', true)
       const page = this.currentPage + 1
       if (page > this.totalPage) {
         return
       }
+      this.$store.dispatch('loading', true)
       await this.fetchItems(page)
       this.$store.dispatch('loading', false)
     },
     async loadPrevious () {
-      this.$store.dispatch('loading', true)
       const page = this.currentPage - 1
       if (page < 1) {
         return
       }
+      this.$store.dispatch('loading', true)
       await this.fetchItems(page)
       this.$store.dispatch('loading', false)
     },
