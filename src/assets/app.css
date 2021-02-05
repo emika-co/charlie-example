@@ -76,21 +76,6 @@ a {
   margin-left: 0;
 }
 
-@media (min-width: 768px) {
-  #sidebar-wrapper {
-    margin-left: 0;
-  }
-
-  #page-content-wrapper {
-    min-width: 0;
-    width: 100%;
-  }
-
-  #wrapper.toggled #sidebar-wrapper {
-    margin-left: -14rem;
-  }
-}
-
 .btn {
   border: none;
 }
@@ -175,4 +160,29 @@ input[type="color"]:focus,
 
 .w-fit-content {
   width: fit-content;
+}
+
+@media (min-width: 768px) {
+  #sidebar-wrapper {
+    margin-left: 0;
+  }
+
+  #page-content-wrapper {
+    min-width: 0;
+    width: 100%;
+  }
+
+  #wrapper.toggled #sidebar-wrapper {
+    margin-left: -14rem;
+  }
+}
+
+
+@media (max-width: 575px) {
+  .bg {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-image: url('https://firebasestorage.googleapis.com/v0/b/charlie-296709.appspot.com/o/resources%2Fbg%2Fbg-mobile.jpg?alt=media&token=657d6202-2806-44c1-8644-e41428536875');
+  }
 }
