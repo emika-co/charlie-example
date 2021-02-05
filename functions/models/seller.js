@@ -72,6 +72,9 @@ var Seller = (() => {
       } else if (!seller.bankAccount.bank) {
         return 'กรุณาเลือกธนาคาร';
       }
+      if (seller.storeName.length > 32) {
+        return 'ชื่อร้านต้องมีความยาวตัวอักษรไม่เกิน 32 ตัว';
+      }
 
       const bankRef = await db.collection('banks').doc(seller.bankAccount.bank);
       const snapshot = await bankRef.get();
