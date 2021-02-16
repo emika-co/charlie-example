@@ -146,6 +146,13 @@ input[type="color"]:focus,
   transition-duration: 0.3s;
 }
 
+.text-default {
+  color: #539AEE;
+}
+.text-default:focus {
+  color: #539AEE;
+}
+
 .disabled {
   cursor: initial;
 }

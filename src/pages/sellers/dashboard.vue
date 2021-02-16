@@ -33,7 +33,7 @@
         <div class="col-12">
           <hr class="my-0">
         </div>
-        <div class="col-12 app-link mr-5 p-3">
+        <div class="col-12 app-link mr-5 p-3" @click="goTo('/sellers/withdraw')">
           <div class="float-left mr-3">
             <img src="~/assets/coffee.svg" class="icon-link">
           </div>
@@ -72,7 +72,6 @@
 </template>
 
 <script>
-// import Swal from 'sweetalert2'
 import { firestore } from '~/plugins/firebase'
 export default {
   layout: 'seller',
