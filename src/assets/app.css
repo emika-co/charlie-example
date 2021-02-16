@@ -177,13 +177,12 @@ input[type="color"]:focus,
   }
 }
 
-
-@media (max-width: 575px) {
-  .bg {
-    color: white;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    background-image: url('https://firebasestorage.googleapis.com/v0/b/charlie-296709.appspot.com/o/resources%2Fbg%2Fbg-mobile.jpg?alt=media&token=657d6202-2806-44c1-8644-e41428536875');
-  }
+/* @media (max-width: 575px) { */
+.bg {
+  color: white;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-image: url('https://firebasestorage.googleapis.com/v0/b/charlie-296709.appspot.com/o/resources%2Fbg%2Fbg-desktop.jpg?alt=media&token=109775e7-fab6-4475-93bc-38b23265d021');
 }
+/* } */
