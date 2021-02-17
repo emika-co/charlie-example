@@ -14,7 +14,8 @@ var item = {
   files: [],
   tags: [],
   storeName: '',
-  sold: 0
+  sold: 0,
+  verify: false
 };
 
 var Item = (() => {
@@ -28,6 +29,7 @@ var Item = (() => {
     item.tags = data.tags;
     item.storeName = data.storeName;
     item.sid = data.sid;
+    item.verify = (data.verify)?data.verify:false;
   }
 
   // get functions
@@ -57,6 +59,9 @@ var Item = (() => {
   });
   Item.prototype.storeName = (() => {
     return item.storeName;
+  });
+  Item.prototype.verify = (() => {
+    return item.verify;
   });
 
   Item.prototype.validate = (async () => {
@@ -108,6 +113,7 @@ var Item = (() => {
         tags: item.tags,
         storeName: item.storeName,
         sold: item.sold,
+        verify: false,
         createdAt: new Date(),
         updatedAt: new Date()
       });
@@ -120,17 +126,20 @@ var Item = (() => {
 
   Item.prototype.public = (() => {
     if (item.id) {
-      return {
-        id: item.id,
-        name: item.name,
-        description: item.description,
-        cost: item.cost,
-        covers: item.covers,
-        tags: item.tags,
-        storeName: item.storeName,
-        sold: item.sold,
-        createdAt: item.createdAt,
-        updatedAt: item.updatedAt
+      if (item.verify) {
+        return {
+          id: item.id,
+          name: item.name,
+          description: item.description,
+          cost: item.cost,
+          covers: item.covers,
+          tags: item.tags,
+          storeName: item.storeName,
+          sold: item.sold,
+          verify: item.verify,
+          createdAt: item.createdAt,
+          updatedAt: item.updatedAt
+        }
       }
     }
     return null;
@@ -190,7 +199,8 @@ var Item = (() => {
           files: result.files,
           tags: result.tags,
           storeName: result.storeName,
-          sold: result.sold
+          sold: result.sold,
+          verify: result.verify
         });
       }
       return null;
