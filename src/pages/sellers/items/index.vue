@@ -7,6 +7,7 @@
       :name="item.name"
       :cost="item.cost"
       :cover-img="item.covers[0]"
+      :verify="item.verify"
       @copyURL="copyURL"
       @editItem="editItem"
     />
