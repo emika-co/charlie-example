@@ -11,7 +11,7 @@
     <div class="col-12 pb-2">
       <hr class="mt-0 mb-2">
       <span class="float-left">
-        {{ cost }} บาท
+        {{ cost }} บาท <span v-if="!verify" class="text-danger">(รอตรวจสอบ)</span>
       </span>
       <span class="float-right">
         <span class="app-link" @click="edit()">
@@ -44,6 +44,10 @@ export default {
     coverImg: {
       default: '',
       type: String
+    },
+    verify: {
+      default: false,
+      type: Boolean
     }
   },
   methods: {
