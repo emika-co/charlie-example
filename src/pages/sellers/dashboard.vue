@@ -42,7 +42,7 @@
         <div class="col-12">
           <hr class="my-0">
         </div>
-        <div class="col-12 app-link mr-5 p-3 disabled">
+        <div class="col-12 app-link mr-5 p-3" @click="goTo('/sellers/withdraw/history')">
           <div class="float-left mr-3">
             <img src="~/assets/file.svg" class="icon-link">
           </div>
