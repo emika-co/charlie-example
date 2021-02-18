@@ -21,10 +21,6 @@ var seller = {
     accountNumber: '',
     bank: ''
   },
-  dashboard: {
-    totalWealth: 0,
-    updatedAt: new Date()
-  },
   valid: false
 };
 
@@ -40,6 +36,10 @@ var Seller = (() => {
     seller.bankAccount = data.bankAccount;
     seller.valid = true;
   }
+
+  Seller.prototype.id = (async () => {
+    return seller.uid;
+  });
 
   Seller.prototype.validate = (async () => {
     try {
@@ -102,9 +102,10 @@ var Seller = (() => {
     }
   });
 
-  Seller.prototype.create = (async () => {
+  Seller.prototype.create = (async (transaction) => {
     try {
-      const sellersDocRef = await db.collection('sellers').doc(seller.uid).set({
+      const sellersDocRef = db.collection('sellers').doc(seller.uid);
+      await transaction.create(sellersDocRef, {
         storeName: seller.storeName,
         firstName: seller.firstName,
         lastName: seller.lastName,
@@ -114,12 +115,10 @@ var Seller = (() => {
         bankAccount: seller.bankAccount,
         uid: seller.uid,
         valid: false,
-        dashboard: seller.dashboard,
         createdAt: new Date(),
         updatedAt: new Date()
       });
-      sellersDocRef.id = seller.uid;
-      return sellersDocRef;
+      return seller.uid;
     } catch (error) {
       console.error(error);
       throw error;
@@ -127,16 +126,14 @@ var Seller = (() => {
   });
 
   Seller.updateDashboard = (async (sid, cost, transaction) => {
-    const sellerDocRef = db.collection('sellers').doc(sid);
-    const snapshot = await sellerDocRef.get();
+    const dashboardRef = db.collection('sellerDashboards').doc(sid);
+    const snapshot = await dashboardRef.get();
     if (snapshot.exists) {
-      let dashboard = snapshot.data().dashboard;
+      let dashboard = snapshot.data();
       dashboard.totalWealth += cost;
-      transaction.update(sellerDocRef, {
-        dashboard: {
-          totalWealth: dashboard.totalWealth,
-          updatedAt: new Date()
-        }
+      transaction.update(dashboardRef, {
+        totalWealth: dashboard.totalWealth,
+        updatedAt: new Date()
       });
     }
   });

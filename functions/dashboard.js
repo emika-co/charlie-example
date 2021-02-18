@@ -27,6 +27,7 @@ async function dispatchListOrder (listDoc) {
       updatedAt: new Date()
     });
   });
+  // create withdraw
   // update dashboard
   sellerDashboard.forEach(async (s) => {
     await Seller.updateDashboard(s.sid, s.cost, batch);
