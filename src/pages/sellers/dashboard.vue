@@ -98,7 +98,7 @@ export default {
   methods: {
     getDashboard () {
       if (this.store.id) {
-        firestore.collection('sellers').doc(this.store.id).onSnapshot((doc) => {
+        firestore.collection('sellerDashboards').doc(this.store.id).onSnapshot((doc) => {
           const store = doc.data()
           this.dashboard = store.dashboard
         })
