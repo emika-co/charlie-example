@@ -6,7 +6,7 @@ const Seller = require('./models/seller');
 async function dispatchListOrder (listDoc) {
   var batch = db.batch();
   var sellerDashboard = [];
-  listDoc.forEach((doc) => {
+  listDoc.forEach(async (doc) => {
     const o = doc.data();
     let index = sellerDashboard.findIndex((s) => {
       if (s.sid) {
@@ -22,16 +22,20 @@ async function dispatchListOrder (listDoc) {
       });
     }
     const orderRef = db.collection('orders').doc(doc.id);
-    batch.update(orderRef, {
+    await batch.update(orderRef, {
       withdraw: true,
       updatedAt: new Date()
     });
   });
+  console.log(sellerDashboard);
   // create withdraw
   // update dashboard
   sellerDashboard.forEach(async (s) => {
+    console.log('SID : ' + s.sid);
     await Seller.updateDashboard(s.sid, s.cost, batch);
   });
+
+  console.log('committing');
   return await batch.commit();
 }
 
