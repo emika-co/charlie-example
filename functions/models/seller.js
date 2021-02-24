@@ -125,19 +125,6 @@ var Seller = (() => {
     }
   });
 
-  Seller.updateDashboard = (async (sid, cost, transaction) => {
-    const dashboardRef = db.collection('sellerDashboards').doc(sid);
-    const snapshot = await dashboardRef.get();
-    if (snapshot.exists) {
-      let dashboard = snapshot.data();
-      dashboard.totalWealth += cost;
-      transaction.update(dashboardRef, {
-        totalWealth: dashboard.totalWealth,
-        updatedAt: new Date()
-      });
-    }
-  });
-
   return Seller;
 })();
 
