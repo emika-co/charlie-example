@@ -12,7 +12,7 @@
         </div>
         <div class="col-12">
           <p class="text-right money">
-            {{ dashboard }} ฿
+            {{ dashboard.totalWealth }} ฿
           </p>
         </div>
       </div>
@@ -100,9 +100,7 @@ export default {
       if (this.store.id) {
         firestore.collection('sellerDashboards').doc(this.store.id).onSnapshot((doc) => {
           const store = doc.data()
-          // eslint-disable-next-line no-console
-          console.log(store)
-          this.dashboard = store.dashboard
+          this.dashboard = store
         })
       }
     },
