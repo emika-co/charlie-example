@@ -31,5 +31,8 @@ service cloud.firestore {
     match /paymentConfirms/{paymentConfirm} {
       allow read, write: if false;
     }
+    match /sellerDashboards/{seller} {
+    	allow read, write: if request.auth.uid == seller;
+    }
   }
 }
