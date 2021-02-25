@@ -1,94 +1,71 @@
 <template>
-  <div class="container-fluid d-flex justify-content-center">
-    <div class="align-self w-100">
-      <div class="row mt-3 p-3 bg-white">
-        <div class="col-12">
-          <div class="float-left mr-2">
-            <img src="~/assets/credit-card.svg" class="mr-3">{{ store.name }}
+  <div class="container-fluid">
+    <div class="row mt-3 p-3 bg-white">
+      <div class="col-12">
+        <div class="float-left mr-2">
+          <img src="~/assets/credit-card.svg" class="mr-3">{{ store.name }}
+        </div>
+        <div class="float-right text-muted">
+          <p>รายการที่ถอนได้</p>
+        </div>
+      </div>
+      <div class="col-12">
+        <p class="text-right money">
+          {{ dashboard.totalWealth }} ฿
+        </p>
+      </div>
+    </div>
+    <div class="row pt-3">
+      <div class="col-12">
+        <span class="text-muted">
+          รายละเอียดการถอน
+        </span>
+      </div>
+    </div>
+    <div class="row bg-white py-3 px-3">
+      <div class="input-group mb-3">
+        <div id="amount" class="w-100">
+          จำนวนเงิน
+        </div>
+        <input
+          v-model="amount"
+          type="number"
+          class="form-control p-0 text-default"
+          aria-describedby="amount"
+        >
+        <div class="input-group-text">
+          บาท
+        </div>
+      </div>
+    </div>
+    <div class="row pt-3">
+      <div class="col-12">
+        <p class="text-muted text-center">
+          เงินจะถูกโอนไปที่
+        </p>
+      </div>
+    </div>
+    <div class="row bg-white py-3 mx-3 bank-account-form">
+      <div class="input-group mb-3 mx-3">
+        <span id="accountName" class="input-group-text">ชื่อบัญชี</span>
+        <span class="ml-auto col-6 my-auto text-muted">{{ seller.bankAccount.accountName }}</span>
+      </div>
+      <div class="input-group mb-3 mx-3">
+        <span id="accountNumber" class="input-group-text">เลขบัญชี</span>
+        <span class="ml-auto col-6 my-auto text-muted">{{ seller.bankAccount.accountNumber }}</span>
+      </div>
+      <div class="input-group mb-3 mx-3">
+        <span id="accountNumber" class="input-group-text">ธนาคาร</span>
+        <span class="ml-auto col-6 my-auto text-muted">{{ seller.bankAccount.bank }}</span>
+      </div>
+    </div>
+    <div class="row pt-4">
+      <div class="col-12">
+        <button class="btn btn-primary w-100 mb-3">
+          <div class="w-fit-content mx-auto">
+            ยืนยันการถอนเงิน
           </div>
-          <div class="float-right">
-            <p>รายการที่ถอนได้</p>
-          </div>
-        </div>
-        <div class="col-12">
-          <p class="text-right money">
-            {{ dashboard.totalWealth }} ฿
-          </p>
-        </div>
-      </div>
-      <div class="row pt-3">
-        <div class="col-12">
-          <span class="text-muted">
-            รายละเอียดการถอน
-          </span>
-        </div>
-      </div>
-      <div class="row bg-white py-3 px-3">
-        <div class="input-group mb-3">
-          <div id="amount" class="w-100">
-            จำนวนเงิน
-          </div>
-          <input
-            v-model="amount"
-            type="number"
-            class="form-control p-0 text-default"
-            aria-describedby="amount"
-          >
-          <div class="input-group-text">
-            บาท
-          </div>
-        </div>
-      </div>
-      <div class="row pt-3">
-        <div class="col-12">
-          <p class="text-muted text-center">
-            เงินจะถูกโอนไปที่
-          </p>
-        </div>
-      </div>
-      <div class="row bg-white py-3">
-        <div class="input-group mb-3 mx-3">
-          <span id="accountName" class="input-group-text">ชื่อบัญชี</span>
-          <input
-            ref="accountName"
-            v-model="accountName"
-            type="text"
-            class="form-control ml-auto col-6"
-            aria-describedby="accountName"
-            placeholder="ต้องระบุ"
-          >
-        </div>
-        <div class="input-group mb-3 mx-3">
-          <span id="accountNumber" class="input-group-text">เลขบัญชี</span>
-          <input
-            ref="accountNumber"
-            v-model="accountNumber"
-            type="text"
-            class="form-control ml-auto col-6"
-            aria-describedby="accountNumber"
-            placeholder="ต้องระบุ"
-          >
-        </div>
-        <div class="input-group mb-3 mx-3">
-          <span id="accountNumber" class="input-group-text">ธนาคาร</span>
-          <select v-model="bank" class="form-select form-control ml-auto col-6 text-muted" aria-describedby="bank" aria-label="bank">
-            <option value="" selected>
-              กรุณาเลือกธนาคาร
-            </option>
-            <option v-for="(b, index) in banks" :key="index" :value="b.id">
-              {{ b.bankNameTH }}
-            </option>
-          </select>
-        </div>
-      </div>
-      <div class="row pt-3">
-        <div class="col-12">
-          <button class="btn btn-primary w-100 mb-3">
-            <div class="w-fit-content mx-auto">
-              ยืนยันการถอนเงิน
-            </div>
-          </button>
-        </div>
+        </button>
       </div>
     </div>
   </div>
@@ -101,15 +78,18 @@ export default {
   middleware: ['auth', 'seller'],
   data () {
     return {
-      banks: [],
       dashboard: {
         totalWealth: 0,
         updatedAt: new Date()
       },
       amount: 0,
-      accountName: '',
-      accountNumber: '',
-      bank: ''
+      seller: {
+        bankAccount: {
+          accountName: '',
+          accountNumber: '',
+          bank: ''
+        }
+      }
     }
   },
   computed: {
@@ -121,30 +101,30 @@ export default {
     this.$store.dispatch('loading', true)
     this.$store.dispatch('setPageTitle', 'ถอนรายได้')
     await this.getDashboard()
-    await this.getBankList()
+    await this.getSellerInfo()
     this.$store.dispatch('loading', false)
   },
   methods: {
     getDashboard () {
       if (this.store.id) {
-        firestore.collection('sellers').doc(this.store.id).onSnapshot((doc) => {
+        firestore.collection('sellerDashboards').doc(this.store.id).onSnapshot((doc) => {
           const store = doc.data()
-          this.dashboard = store.dashboard
+          this.dashboard = store
         })
       }
     },
-    async getBankList () {
-      try {
-        const bankRef = firestore.collection('banks')
-        const snapshot = await bankRef.get()
-        snapshot.forEach((doc) => {
-          const data = doc.data()
-          data.id = doc.id
-          this.banks.push(data)
-        })
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log(error)
+    async getSellerInfo () {
+      const sellerRef = firestore.collection('sellers').doc(this.store.id)
+      const sellerSnapshot = await sellerRef.get()
+      if (!sellerSnapshot.exists) {
+        return
+      }
+      const sellerResult = sellerSnapshot.data()
+      this.seller.bankAccount.accountName = sellerResult.bankAccount.accountName
+      this.seller.bankAccount.accountNumber = sellerResult.bankAccount.accountNumber
+      const bank = await sellerResult.bankAccount.bank.get()
+      if (bank.exists) {
+        this.seller.bankAccount.bank = bank.id
       }
     }
   }
@@ -157,5 +137,9 @@ export default {
 }
 .icon-link {
   margin-top: -3px;
+}
+.bank-account-form {
+  border: 1px dashed #E5E5E5;
+  border-radius: 5px;
 }
 </style>
