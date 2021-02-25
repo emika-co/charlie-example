@@ -6,7 +6,7 @@
           <div class="float-left mr-2">
             <img src="~/assets/credit-card.svg" class="mr-3">{{ store.name }}
           </div>
-          <div class="float-right">
+          <div class="float-right text-muted">
             <p>รายการที่ถอนได้</p>
           </div>
         </div>
